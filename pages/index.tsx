@@ -1,11 +1,12 @@
 import type { NextPage } from 'next';
-import { Navbar } from '../components/Navbar';
+import Expenses from '../components/Expenses';
+import { PageLayout } from '../components/PageLayout';
 
 const Home: NextPage = () => {
   return (
-    <div>
-      <Navbar />
-    </div>
+    <PageLayout>
+      <Expenses />
+    </PageLayout>
   );
 };
 
