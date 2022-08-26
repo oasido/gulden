@@ -16,7 +16,6 @@ export default function App(props: AppProps) {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          fontFamily: 'Open Sans, sans serif',
           colorScheme: 'dark',
         }}
       >
