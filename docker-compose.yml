@@ -1,0 +1,13 @@
+version: '4.0'
+
+services:
+  app:
+    image: gulden
+    build: .
+    ports:
+      - 3000:3000
+    volumes:
+      - ./components:/app/components
+      - ./pages:/app/pages
+      - ./styles:/app/styles
+      - ./types:/app/types
