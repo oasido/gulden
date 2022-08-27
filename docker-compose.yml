@@ -11,3 +11,13 @@ services:
       - ./pages:/app/pages
       - ./styles:/app/styles
       - ./types:/app/types
+    depends_on:
+      - db
+  db:
+    image: mongo:6.0.1-focal
+    ports:
+      - 27017:27017
+    volumes:
+      - gulden-db:/data/db
+volumes:
+  gulden-db: {}
