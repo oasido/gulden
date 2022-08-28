@@ -1,4 +1,5 @@
 import { createStyles, Title, Table } from '@mantine/core';
+import { Expense } from '../../types/generic';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -7,7 +8,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const Expenses = () => {
+export const Expenses = (expenses: Expense[]) => {
   const { classes } = useStyles();
 
   const elements = [
