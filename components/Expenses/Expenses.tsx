@@ -50,13 +50,20 @@ export const Expenses = (expenses: Expense[]) => {
       <Table highlightOnHover verticalSpacing="sm">
         <thead>
           <tr>
-            <th>#</th>
+            <th>Date</th>
             <th>Name</th>
             <th>Price</th>
-            <th>Date</th>
           </tr>
         </thead>
-        <tbody>{rows}</tbody>
+        <tbody>
+          {expenseData.map((e, idx) => (
+            <tr key={idx}>
+              <td>{e.date}</td>
+              <td>{e.name}</td>
+              <td>{e.price}</td>
+            </tr>
+          ))}
+        </tbody>
       </Table>
     </div>
   );
