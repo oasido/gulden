@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from 'react';
+import { createStyles, Title, Table, Input, Group } from '@mantine/core';
 import { Expense } from '../../types/generic';
+import { AddExpenseModal } from './AddExpenseModal';
 
 const useStyles = createStyles((theme) => ({
   title: {
@@ -39,9 +41,12 @@ export const Expenses = (expenses: Expense[]) => {
 
   return (
     <div>
-      <Title order={4} className={classes.title}>
-        Expenses
-      </Title>
+      <Group position="apart">
+        <Title order={4} className={classes.title}>
+          Expenses
+        </Title>
+        <AddExpenseModal />
+      </Group>
       <Input
         placeholder="Search..."
         value={searchInput}
