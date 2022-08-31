@@ -33,6 +33,9 @@ export const AddExpenseModal = () => {
           <Button variant="outline" onClick={() => console.log('')}>
             Add
           </Button>
+          <Button variant="outline" color="red" onClick={() => setOpened(false)}>
+            Cancel
+          </Button>
         </Group>
       </Modal>
       <Button onClick={() => setOpened(true)}>Add</Button>
