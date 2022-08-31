@@ -1,4 +1,15 @@
 import { useState } from 'react';
+import {
+  Button,
+  createStyles,
+  Group,
+  TextInput,
+  Modal,
+  Title,
+  Container,
+  ActionIcon,
+  NumberInput,
+} from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { z } from 'zod';
 
@@ -34,9 +45,41 @@ export const AddExpenseModal = () => {
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="New Expense">
-        <Title order={3}>💸 Add Expense</Title>
-        <Group position="center" mt="xl">
-          <Button variant="outline" onClick={() => console.log('')}>
+        <Group position="apart">
+          <Title order={3}>💸 Add Expense</Title>
+          <ActionIcon variant="default" onClick={() => form.reset()}>
+            ❌
+          </ActionIcon>
+        </Group>
+        <Container mt="sm" mb="xl">
+          <TextInput
+            label="Name"
+            description="What did you spend money on?"
+            placeholder="Spent on..."
+            my="xs"
+            {...form.getInputProps('name')}
+            error={form.errors.name && form.errors.name}
+          />
+          <TextInput
+            label="Date"
+            description="When was the transaction?"
+            type="date"
+            my="xs"
+            {...form.getInputProps('date')}
+            error={form.errors.date && form.errors.date}
+          />
+          <NumberInput
+            label="Amount"
+            description="How much did you pay?"
+            defaultValue={0.0}
+            my="xs"
+            precision={2}
+            step={0.05}
+            {...form.getInputProps('amount')}
+          />
+        </Container>
+        <Group position="center">
+          <Button variant="outline" onClick={addExpense}>
             Add
           </Button>
           <Button variant="outline" color="red" onClick={() => setOpened(false)}>
