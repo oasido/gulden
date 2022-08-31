@@ -25,6 +25,12 @@ export const AddExpenseModal = () => {
     },
   });
 
+  const addExpense = () => {
+    console.log(form.validate());
+    console.log(form.errors);
+    console.log(form.values);
+  };
+
   return (
     <>
       <Modal opened={opened} onClose={() => setOpened(false)} title="New Expense">
