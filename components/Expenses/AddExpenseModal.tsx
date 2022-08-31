@@ -17,9 +17,11 @@ export const AddExpenseModal = () => {
   const [opened, setOpened] = useState<boolean>(false);
 
   const form = useForm({
+    validate: zodResolver(expenseSchema),
     initialValues: {
       name: '',
-      email: '',
+      date: '',
+      amount: 0,
     },
   });
 
