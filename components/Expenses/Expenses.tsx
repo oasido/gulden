@@ -68,6 +68,13 @@ export const Expenses = (expenses: Expense[]) => {
               <td>{e.price}</td>
             </tr>
           ))}
+          {expenseData.length === 0 && (
+            <tr>
+              <td></td>
+              <td>No results found.</td>
+              <td></td>
+            </tr>
+          )}
         </tbody>
       </Table>
     </div>
