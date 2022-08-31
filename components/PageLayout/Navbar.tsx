@@ -14,7 +14,7 @@ export const Navbar = () => {
   const { classes } = useStyles();
   return (
     <div className={classes.navbar}>
-      <Title order={3}>gulden</Title>
+      <Title order={2}>💰 Gulden</Title>
     </div>
   );
 };
