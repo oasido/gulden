@@ -1,10 +1,15 @@
 import { useState } from 'react';
-import { Button, createStyles, Group, Modal, Title } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { z } from 'zod';
 
 const useStyles = createStyles((theme) => ({
   //,
 }));
+
+const expenseSchema = z.object({
+  name: z.string().trim().min(2),
+  date: z.string().trim().min(1, { message: 'Invalid date' }),
+  amount: z.number(),
+});
 
 export const AddExpenseModal = () => {
   const { classes } = useStyles();
