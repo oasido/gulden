@@ -10,23 +10,29 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const Expenses = (expenses: Expense[]) => {
+export const Expenses = ({
+  expenses,
+  isConnected,
+}: {
+  expenses?: Expense[];
+  isConnected: boolean;
+}) => {
   const { classes } = useStyles();
   const [expenseData, setExpenseData] = useState<Expense[]>([
-    { id: 6, price: 12.011, date: '20/11/22', name: 'Carbon' },
-    { id: 7, price: 14.007, date: '20/11/22', name: 'Nitrogen' },
-    { id: 39, price: 88.906, date: '20/11/22', name: 'Yttrium' },
-    { id: 56, price: 137.33, date: '20/11/22', name: 'Barium' },
-    { id: 58, price: 140.12, date: '20/11/22', name: 'Cerium' },
+    { price: 12.011, date: '20/11/22', name: 'Carbon' },
+    { price: 14.007, date: '20/11/22', name: 'Nitrogen' },
+    { price: 88.906, date: '20/11/22', name: 'Yttrium' },
+    { price: 137.33, date: '20/11/22', name: 'Barium' },
+    { price: 140.12, date: '20/11/22', name: 'Cerium' },
   ]);
   const [searchInput, setSearchInput] = useState<string>('');
 
   const elements = [
-    { id: 6, price: 12.011, date: '20/11/22', name: 'Carbon' },
-    { id: 7, price: 14.007, date: '20/11/22', name: 'Nitrogen' },
-    { id: 39, price: 88.906, date: '20/11/22', name: 'Yttrium' },
-    { id: 56, price: 137.33, date: '20/11/22', name: 'Barium' },
-    { id: 58, price: 140.12, date: '20/11/22', name: 'Cerium' },
+    { price: 12.011, date: '20/11/22', name: 'Carbon' },
+    { price: 14.007, date: '20/11/22', name: 'Nitrogen' },
+    { price: 88.906, date: '20/11/22', name: 'Yttrium' },
+    { price: 137.33, date: '20/11/22', name: 'Barium' },
+    { price: 140.12, date: '20/11/22', name: 'Cerium' },
   ];
 
   // implement with useMemo
