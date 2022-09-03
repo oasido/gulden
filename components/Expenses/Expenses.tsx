@@ -77,6 +77,7 @@ export const Expenses = (expenses: Expense[]) => {
           )}
         </tbody>
       </Table>
+      <pre>{JSON.stringify(expenses)}</pre>
     </div>
   );
 };
