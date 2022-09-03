@@ -12,6 +12,7 @@ import {
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { z } from 'zod';
+import { FaEraser } from 'react-icons/fa';
 
 const useStyles = createStyles((theme) => ({
   //,
@@ -24,7 +25,7 @@ const expenseSchema = z.object({
 });
 
 export const AddExpenseModal = () => {
-  const { classes } = useStyles();
+  const { classes, theme } = useStyles();
   const [opened, setOpened] = useState<boolean>(false);
 
   const form = useForm({
@@ -48,7 +49,7 @@ export const AddExpenseModal = () => {
         <Group position="apart">
           <Title order={3}>💸 Add Expense</Title>
           <ActionIcon variant="default" onClick={() => form.reset()}>
-            ❌
+            <FaEraser color={theme.colors.red[7]} />
           </ActionIcon>
         </Group>
         <Container mt="sm" mb="xl">
