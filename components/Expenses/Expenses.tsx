@@ -10,13 +10,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const Expenses = ({
-  expenses,
-  isConnected,
-}: {
-  expenses?: Expense[];
-  isConnected: boolean;
-}) => {
+export const Expenses = ({ expenses }: { expenses?: Expense[] }) => {
   const { classes } = useStyles();
   const [expenseData, setExpenseData] = useState<Expense[]>([
     { price: 12.011, date: '20/11/22', name: 'Carbon' },
