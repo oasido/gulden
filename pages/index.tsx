@@ -7,29 +7,28 @@ import clientPromise from '../lib/mongodb';
 export const getServerSideProps = async () => {
   try {
     const client = await clientPromise;
-    const db = await client.db('gulden');
-    const expenses = await db.collection('expenses').find({});
-
-    // console.log(expenses);
+    const db = client.db('gulden');
+    const expenses = await db.collection('expenses').find({}).toArray();
 
     return {
-      props: { expenses: 'JSON.stringify()' },
+      props: { expenses: JSON.stringify(expenses) },
     };
   } catch (e) {
     console.error(e);
     return {
-      props: {},
+      props: {
+        expenses: '',
+      },
     };
   }
 };
 
 const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { expenses } = props;
-  // console.log(expenses);
 
   return (
     <PageLayout>
-      <Expenses />
+      <Expenses expenses={JSON.parse(expenses)} />
     </PageLayout>
   );
 };
