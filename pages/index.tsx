@@ -22,9 +22,7 @@ export const getServerSideProps = async () => {
   }
 };
 
-const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const { expenses } = props;
-
+const Home: NextPage<{ expenses: string }> = ({ expenses }) => {
   return (
     <PageLayout>
       <Expenses expenses={JSON.parse(expenses)} />
