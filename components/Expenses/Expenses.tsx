@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 import { createStyles, Title, Table, Input, Group } from '@mantine/core';
-import { Expense } from '../../types/generic';
+import { Expense } from '@types/generic';
 import { AddExpenseModal } from './AddExpenseModal';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   title: {
     marginTop: '1rem',
     marginBottom: '1rem',
@@ -77,7 +77,7 @@ export const Expenses = ({ expenses }: { expenses?: Expense[] }) => {
           )}
         </tbody>
       </Table>
-      <pre>{JSON.stringify(expenses)}</pre>
+      <>{JSON.stringify(expenses)}</>
     </div>
   );
 };

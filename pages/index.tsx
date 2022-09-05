@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import Expenses from '../components/Expenses';
 import { PageLayout } from '../components/PageLayout';
-import { InferGetServerSidePropsType } from 'next';
 import clientPromise from '../lib/mongodb';
 
 export const getServerSideProps = async () => {
