@@ -16,7 +16,7 @@ export const getServerSideProps = async () => {
     console.error(e);
     return {
       props: {
-        expenses: '',
+        expenses: '[]',
       },
     };
   }
