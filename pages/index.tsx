@@ -2,16 +2,18 @@ import type { NextPage } from 'next';
 import Expenses from '../components/Expenses';
 import { PageLayout } from '../components/PageLayout';
 import { InferGetServerSidePropsType } from 'next';
-import dbConnect from '../lib/dbConnect';
-import Expense from '../models/Expense';
+import clientPromise from '../lib/mongodb';
 
 export const getServerSideProps = async () => {
   try {
-    await dbConnect();
-    const data = await Expense.find({});
+    const client = await clientPromise;
+    const db = await client.db('gulden');
+    const expenses = await db.collection('expenses').find({});
+
+    // console.log(expenses);
 
     return {
-      props: { expenses: JSON.stringify(data) },
+      props: { expenses: 'JSON.stringify()' },
     };
   } catch (e) {
     console.error(e);
@@ -23,10 +25,11 @@ export const getServerSideProps = async () => {
 
 const Home: NextPage = (props: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { expenses } = props;
+  // console.log(expenses);
 
   return (
     <PageLayout>
-      <Expenses expenses={JSON.parse(expenses)} />
+      <Expenses />
     </PageLayout>
   );
 };
