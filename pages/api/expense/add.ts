@@ -8,6 +8,16 @@ type Data = {
 
 type Request = {};
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
-  res.status(200).json({ name: 'John Doe' });
-}
+const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  try {
+    const client = await clientPromise;
+    const db = client.db('gulden');
+    const expenses = await db.collection('expenses').find({}).toArray();
+
+    res.status(200).json({ name: 'John Doe' });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export default handler;
