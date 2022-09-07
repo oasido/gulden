@@ -1,7 +1,9 @@
 import type { NextPage } from 'next';
-import Expenses from '../components/Expenses';
-import { PageLayout } from '../components/PageLayout';
-import clientPromise from '../lib/mongodb';
+import Expenses from '@components/Expenses';
+import { PageLayout } from '@components/PageLayout';
+import clientPromise from '@lib/mongodb';
+import { Text } from '@mantine/core';
+import { useSession } from 'next-auth/react';
 
 export const getServerSideProps = async () => {
   try {
@@ -23,9 +25,11 @@ export const getServerSideProps = async () => {
 };
 
 const Home: NextPage<{ expenses: string }> = ({ expenses }) => {
+  const { data: session } = useSession();
+
   return (
     <PageLayout>
-      <Expenses expenses={JSON.parse(expenses)} />
+      {session ? <Expenses expenses={expenses} /> : <Text mt="lg">You need to log in first!</Text>}
     </PageLayout>
   );
 };
