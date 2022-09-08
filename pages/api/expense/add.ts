@@ -10,15 +10,19 @@ type Data = {
 type Request = {};
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
-  try {
-    const client = await clientPromise;
-    const db = client.db('gulden');
-    const collection = db.collection('expenses');
-    const foundExpenses = await collection.find({}).toArray();
+  if (req.method === 'POST') {
+    try {
+      const client = await clientPromise;
+      const db = client.db('gulden');
+      const collection = db.collection('expenses');
+      const foundExpenses = await collection.find({}).toArray();
 
-    res.status(200).json(foundExpenses);
-  } catch (err) {
-    console.error(err);
+      res.status(200).json(foundExpenses);
+    } catch (err) {
+      console.error(err);
+    }
+  } else {
+    res.status(400).json({ msg: 'Error code 400, bad request method.' });
   }
 };
 
