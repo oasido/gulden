@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import {
   Button,
   createStyles,
@@ -10,9 +10,14 @@ import {
   ActionIcon,
   NumberInput,
 } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { useForm, zodResolver } from '@mantine/form';
 import { z } from 'zod';
-import { FaEraser } from 'react-icons/fa';
+import { FaEraser, FaCheckCircle } from 'react-icons/fa';
+import { VscError } from 'react-icons/vsc';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import { Expense } from 'types/generic';
 
 const useStyles = createStyles((theme) => ({
   //,
@@ -30,6 +35,7 @@ export const AddExpenseModal = ({
   setFiltered: Dispatch<SetStateAction<Expense[]>>;
 }) => {
   const { classes, theme } = useStyles();
+  const { data: session } = useSession();
   const [opened, setOpened] = useState<boolean>(false);
 
   const form = useForm({
