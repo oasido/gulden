@@ -21,7 +21,7 @@ const useStyles = createStyles((theme) => ({
 const expenseSchema = z.object({
   name: z.string().trim().min(2),
   date: z.string().trim().min(1, { message: 'Invalid date' }),
-  amount: z.number(),
+  price: z.number(),
 });
 
 export const AddExpenseModal = ({
@@ -37,7 +37,7 @@ export const AddExpenseModal = ({
     initialValues: {
       name: '',
       date: '',
-      amount: 0,
+      price: 0,
     },
   });
 
@@ -97,13 +97,13 @@ export const AddExpenseModal = ({
             error={form.errors.date && form.errors.date}
           />
           <NumberInput
-            label="Amount"
+            label="Price"
             description="How much did you pay?"
             defaultValue={0.0}
             my="xs"
             precision={2}
             step={0.05}
-            {...form.getInputProps('amount')}
+            {...form.getInputProps('price')}
           />
         </Container>
         <Group position="center">
