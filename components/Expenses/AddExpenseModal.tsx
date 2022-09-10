@@ -24,7 +24,11 @@ const expenseSchema = z.object({
   amount: z.number(),
 });
 
-export const AddExpenseModal = () => {
+export const AddExpenseModal = ({
+  setFiltered,
+}: {
+  setFiltered: Dispatch<SetStateAction<Expense[]>>;
+}) => {
   const { classes, theme } = useStyles();
   const [opened, setOpened] = useState<boolean>(false);
 
@@ -37,10 +41,33 @@ export const AddExpenseModal = () => {
     },
   });
 
-  const addExpense = () => {
-    console.log(form.validate());
-    console.log(form.errors);
-    console.log(form.values);
+  const addExpense = async () => {
+    form.validate();
+
+    // check if there are any parse errors
+    if (Object.keys(form.errors).length === 0) {
+      const result = await axios.post('/api/expense/add', form.values);
+
+      if (result.status === 200) {
+        showNotification({
+          title: 'Expense added',
+          message: '',
+          icon: <FaCheckCircle />,
+          autoClose: 5000,
+        });
+        setFiltered((previousState) => {
+          return [{ id: result.data.insertId, ...form.values }, ...previousState];
+        });
+      } else {
+        showNotification({
+          title: 'An error occurred',
+          message: '',
+          icon: <VscError />,
+          autoClose: 5000,
+          color: 'red',
+        });
+      }
+    }
   };
 
   return (

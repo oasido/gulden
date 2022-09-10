@@ -32,7 +32,7 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
         <Title order={4} className={classes.title}>
           Expenses
         </Title>
-        <AddExpenseModal />
+          <AddExpenseModal setFiltered={setFiltered} />
       </Group>
       <Input
         placeholder="Search..."
