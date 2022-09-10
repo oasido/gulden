@@ -12,6 +12,7 @@ services:
       - ./styles:/app/styles
       - ./models:/app/models
       - ./types:/app/types
+      - ./context:/app/context
     depends_on:
       - db
   db:
