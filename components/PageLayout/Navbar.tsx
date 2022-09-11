@@ -16,7 +16,7 @@ const useStyles = createStyles((theme) => ({
 export const Navbar = () => {
   const { classes } = useStyles();
   const { data: session } = useSession();
-  console.log(session);
+  // console.log(session);
 
   return (
     <div className={classes.navbar}>

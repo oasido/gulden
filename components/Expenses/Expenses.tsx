@@ -1,5 +1,5 @@
 import { ChangeEvent, useMemo, useState } from 'react';
-import { createStyles, Title, Table, Input, Group, Container } from '@mantine/core';
+import { createStyles, Title, Table, Input, Group, Container, Text } from '@mantine/core';
 import { Expense } from 'types/generic';
 import { AddExpenseModal } from './AddExpenseModal';
 import {
@@ -73,7 +73,7 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
           value={globalFilter || ''}
           onChange={(evt: ChangeEvent<HTMLInputElement>) => setGlobalFilter(evt.target.value)}
         />
-        <Table highlightOnHover fontSize="md" verticalSpacing="sm" mb={100}>
+        <Table highlightOnHover fontSize="md" verticalSpacing="sm" mb={20}>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
