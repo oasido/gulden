@@ -1,30 +1,63 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import { createStyles, Title, Table, Input, Group, Container } from '@mantine/core';
 import { Expense } from 'types/generic';
 import { AddExpenseModal } from './AddExpenseModal';
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
+  getSortedRowModel,
+  SortingState,
+  ColumnDef,
+  getFilteredRowModel,
+} from '@tanstack/react-table';
 
 const useStyles = createStyles(() => ({
   title: {
     marginTop: '1rem',
     marginBottom: '1rem',
   },
+
+  sortable: {
+    cursor: 'pointer',
+    select: 'none',
+  },
 }));
 
 export const Expenses = ({ expenses }: { expenses: string }) => {
-  const { classes, theme } = useStyles();
+  const { classes } = useStyles();
 
-  const [expensesArr, setExpensesArr] = useState(JSON.parse(expenses));
-  const [filtered, setFiltered] = useState(expensesArr);
-  const [searchInput, setSearchInput] = useState<string>('');
+  const [data, setData] = useState(JSON.parse(expenses));
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
 
-  // implement with useMemo
-  const handleSearch = (string: string) => {
-    setSearchInput(string);
-    const search = expensesArr.filter((expense: Expense) =>
-      expense.name.toLowerCase().includes(string.toLowerCase())
-    );
-    setFiltered(search);
-  };
+  const columns = useMemo<ColumnDef<Expense>[]>(
+    () => [
+      { header: 'Date', accessorKey: 'date' },
+      {
+        header: 'Name',
+        accessorKey: 'name',
+      },
+      {
+        header: 'Price',
+        accessorKey: 'price',
+        enableGlobalFilter: false,
+      },
+    ],
+    []
+  );
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { sorting, globalFilter },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    getSortedRowModel: getSortedRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    debugTable: true,
+  });
 
   return (
     <div>
@@ -33,38 +66,46 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
           <Title order={4} className={classes.title}>
             Expenses
           </Title>
-          <AddExpenseModal setFiltered={setFiltered} />
+          <AddExpenseModal setData={setData} />
         </Group>
         <Input
           placeholder="Search..."
-          value={searchInput}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => handleSearch(evt.target.value)}
+          value={globalFilter || ''}
+          onChange={(evt: ChangeEvent<HTMLInputElement>) => setGlobalFilter(evt.target.value)}
         />
         <Table highlightOnHover fontSize="md" verticalSpacing="sm" mb={100}>
           <thead>
-            <tr>
-              <th></th>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.reverse().map((e: Expense, idx: number) => (
-              <tr key={idx}>
-                <td>X</td>
-                <td>{e.date}</td>
-                <td>{e.name}</td>
-                <td>{e.price}</td>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id}>
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort() ? classes.sortable : '',
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: ' 🔼',
+                          desc: ' 🔽',
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
+                  </th>
+                ))}
               </tr>
             ))}
-            {filtered.length === 0 && (
-              <tr>
-                <td></td>
-                <td>No results found.</td>
-                <td></td>
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                ))}
               </tr>
-            )}
+            ))}
           </tbody>
         </Table>
       </Container>
