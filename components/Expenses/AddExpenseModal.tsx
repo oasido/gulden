@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import {
   Button,
   createStyles,
@@ -29,11 +29,7 @@ const expenseSchema = z.object({
   price: z.number(),
 });
 
-export const AddExpenseModal = ({
-  setFiltered,
-}: {
-  setFiltered: Dispatch<SetStateAction<Expense[]>>;
-}) => {
+export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) => {
   const { classes, theme } = useStyles();
   const { data: session } = useSession();
   const [opened, setOpened] = useState<boolean>(false);
@@ -49,9 +45,10 @@ export const AddExpenseModal = ({
 
   const addExpense = async () => {
     form.validate();
+    console.log(form.errors);
 
     // check if there are any parse errors
-    if (Object.keys(form.errors).length === 0) {
+    if (Object.keys(form.errors).length === 0 && form.isTouched()) {
       const result = await axios.post('/api/expense/add', form.values);
 
       if (result.status === 200) {
@@ -61,9 +58,7 @@ export const AddExpenseModal = ({
           icon: <FaCheckCircle />,
           autoClose: 5000,
         });
-        setFiltered((previousState) => {
-          return [{ id: result.data.insertId, ...form.values }, ...previousState];
-        });
+        setData((data: Expense[]) => [{ _id: result.data.insertId, ...form.values }, ...data]);
       } else {
         showNotification({
           title: 'An error occurred',
