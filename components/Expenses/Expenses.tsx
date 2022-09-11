@@ -108,6 +108,13 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
             ))}
           </tbody>
         </Table>
+
+        {table.getPrePaginationRowModel().rows.length === 0 && globalFilter !== '' && (
+          <Text size="lg">Nothing found.</Text>
+        )}
+        {table.getPrePaginationRowModel().rows.length === 0 && globalFilter === '' && (
+          <Text size="lg">Empty table.</Text>
+        )}
       </Container>
     </div>
   );
