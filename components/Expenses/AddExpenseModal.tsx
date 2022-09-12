@@ -112,7 +112,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             Add
           </Button>
           <Button variant="outline" color="red" onClick={() => setOpened(false)}>
-            Cancel
+            Close
           </Button>
         </Group>
       </Modal>
