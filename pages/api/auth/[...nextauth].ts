@@ -1,6 +1,8 @@
+import clientPromise from '@lib/mongodb';
 import NextAuth from 'next-auth';
 // import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from 'next-auth/providers/google';
+import { User } from 'types/generic';
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
@@ -78,9 +80,20 @@ export default NextAuth({
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user, account, profile, email, credentials }): Promise<boolean | undefined> {
       if (account.provider === 'google') {
         // db user search query & register user if non-existent
+        const client = await clientPromise;
+        const db = client.db('gulden');
+        const users = db.collection<User>('users');
+
+        const foundUser = await users.findOne({ email: user.email }).toArray();
+        console.log(foundUser);
+        if (foundUser.email) {
+          console.log('user was found in db!');
+        } else {
+          console.log('user was not found in db!');
+        }
         return true;
       }
     },

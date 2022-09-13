@@ -4,3 +4,10 @@ export type Expense = {
   price: number;
   date: string;
 };
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+}
