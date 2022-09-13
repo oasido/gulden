@@ -1,5 +1,16 @@
-import { ChangeEvent, useMemo, useState } from 'react';
-import { createStyles, Title, Table, Input, Group, Container, Text } from '@mantine/core';
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  createStyles,
+  Title,
+  Table,
+  Input,
+  Button,
+  Group,
+  Container,
+  Text,
+  Checkbox,
+  CheckboxProps,
+} from '@mantine/core';
 import { Expense } from 'types/generic';
 import { AddExpenseModal } from './AddExpenseModal';
 import {
@@ -24,6 +35,21 @@ const useStyles = createStyles(() => ({
   },
 }));
 
+const IndeterminateCheckbox = ({
+  indeterminate,
+  ...rest
+}: { indeterminate?: boolean } & Partial<CheckboxProps>) => {
+  const ref: any = useRef(null!);
+
+  useEffect(() => {
+    if (typeof indeterminate === 'boolean') {
+      ref.current.indeterminate = !rest.checked && indeterminate;
+    }
+  }, [ref, indeterminate]);
+
+  return <Checkbox ref={ref} {...rest} />;
+};
+
 export const Expenses = ({ expenses }: { expenses: string }) => {
   const { classes } = useStyles();
 
@@ -33,6 +59,29 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
 
   const columns = useMemo<ColumnDef<Expense>[]>(
     () => [
+      {
+        id: 'select',
+        header: ({ table }) => (
+          <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+        ),
+        cell: ({ row }) => (
+          <div>
+            <IndeterminateCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                indeterminate: row.getIsSomeSelected(),
+                onChange: row.getToggleSelectedHandler(),
+              }}
+            />
+          </div>
+        ),
+      },
       { header: 'Date', accessorKey: 'date' },
       {
         header: 'Name',
@@ -66,7 +115,16 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
           <Title order={4} className={classes.title}>
             Expenses
           </Title>
-          <AddExpenseModal setData={setData} />
+          <Group spacing="xs">
+            <Button
+              onClick={() =>
+                console.info('table.getSelectedFlatRows()', table.getSelectedRowModel().flatRows)
+              }
+            >
+              Log table.getSelectedFlatRows()
+            </Button>
+            <AddExpenseModal setData={setData} />
+          </Group>
         </Group>
         <Input
           placeholder="Search..."
