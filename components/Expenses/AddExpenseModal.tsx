@@ -45,11 +45,13 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
 
   const addExpense = async () => {
     form.validate();
-    console.log(form.errors);
 
     // check if there are any parse errors
-    if (Object.keys(form.errors).length === 0 && form.isTouched()) {
-      const result = await axios.post('/api/expense/add', form.values);
+    if (Object.keys(form.errors).length === 0 && form.isTouched() && session) {
+      const result = await axios.post('/api/expense/add', {
+        user: session.user?.email,
+        ...form.values,
+      });
 
       if (result.status === 200) {
         showNotification({
@@ -58,7 +60,11 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
           icon: <FaCheckCircle />,
           autoClose: 5000,
         });
-        setData((data: Expense[]) => [{ _id: result.data.insertId, ...form.values }, ...data]);
+        setData((data: Expense[]) => [
+          { _id: result.data.insertId, user: session.user?.email, ...form.values },
+          ...data,
+        ]);
+        form.reset();
       } else {
         showNotification({
           title: 'An error occurred',
