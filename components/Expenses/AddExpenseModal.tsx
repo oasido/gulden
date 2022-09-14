@@ -105,6 +105,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             precision={2}
             step={0.05}
             {...form.getInputProps('price')}
+            onFocus={(evt) => evt.target.select()}
           />
         </Container>
         <Group position="center">
