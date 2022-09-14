@@ -1,12 +1,13 @@
 export type Expense = {
   _id?: string;
+  user: string;
   name: string;
   price: number;
   date: string;
 };
 
 export interface User {
-  id: string;
+  _id?: string;
   name: string;
   email: string;
   image: string;
