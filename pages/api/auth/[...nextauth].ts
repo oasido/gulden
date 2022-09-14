@@ -82,19 +82,21 @@ export default NextAuth({
   callbacks: {
     async signIn({ user, account, profile, email, credentials }): Promise<boolean | undefined> {
       if (account.provider === 'google') {
-        // db user search query & register user if non-existent
         const client = await clientPromise;
         const db = client.db('gulden');
-        const users = db.collection<User>('users');
+        const users = db.collection('users');
 
-        const foundUser = await users.findOne({ email: user.email }).toArray();
-        console.log(foundUser);
-        if (foundUser.email) {
-          console.log('user was found in db!');
+        const foundUser = await users.findOne({ email: user.email });
+        if (foundUser !== null) {
+          return true;
         } else {
-          console.log('user was not found in db!');
+          const newUser = await users.insertOne(user);
+          if (newUser.acknowledged === true) {
+            return true;
+          } else {
+            return false;
+          }
         }
-        return true;
       }
     },
     // async redirect({ url, baseUrl }) { return baseUrl },
@@ -107,5 +109,5 @@ export default NextAuth({
   events: {},
 
   // Enable debug messages in the console if you are having problems
-  debug: false,
+  debug: true,
 });
