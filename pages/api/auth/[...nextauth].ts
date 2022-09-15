@@ -1,12 +1,13 @@
 import clientPromise from '@lib/mongodb';
 import NextAuth from 'next-auth';
+import type { NextAuthOptions } from 'next-auth';
 // import GithubProvider from "next-auth/providers/github"
 import GoogleProvider from 'next-auth/providers/google';
 import { User } from 'types/generic';
 
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
-export default NextAuth({
+export const authOptions: NextAuthOptions = {
   // https://next-auth.js.org/configuration/providers
   providers: [
     // GithubProvider({
@@ -110,4 +111,6 @@ export default NextAuth({
 
   // Enable debug messages in the console if you are having problems
   debug: true,
-});
+};
+
+export default NextAuth(authOptions);

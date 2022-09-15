@@ -5,8 +5,19 @@ import clientPromise from '@lib/mongodb';
 import { Text } from '@mantine/core';
 import { useSession } from 'next-auth/react';
 import { useStore } from '@context/useStore';
+import { unstable_getServerSession } from 'next-auth/next';
+import { authOptions } from './api/auth/[...nextauth]';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async ({
+  req,
+  res,
+}: {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}) => {
+  const session = await unstable_getServerSession(req, res, authOptions);
+  console.log(session);
   try {
     const client = await clientPromise;
     const db = client.db('gulden');
