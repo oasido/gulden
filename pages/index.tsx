@@ -17,17 +17,19 @@ export const getServerSideProps = async ({
   res: NextApiResponse;
 }) => {
   const session = await unstable_getServerSession(req, res, authOptions);
-  console.log(session);
-  try {
+  console.log(session?.user?.email);
+  if (session?.user?.email) {
     const client = await clientPromise;
     const db = client.db('gulden');
-    const expenseData = await db.collection('expenses').find({}).toArray();
+    const expenseData = await db
+      .collection('expenses')
+      .find({ user: session.user.email })
+      .toArray();
 
     return {
       props: { expenseData: JSON.stringify(expenseData) },
     };
-  } catch (e) {
-    console.error(e);
+  } else {
     return {
       props: {
         expenseData: '[]',

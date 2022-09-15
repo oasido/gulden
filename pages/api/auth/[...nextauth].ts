@@ -110,7 +110,7 @@ export const authOptions: NextAuthOptions = {
   events: {},
 
   // Enable debug messages in the console if you are having problems
-  debug: true,
+  debug: false,
 };
 
 export default NextAuth(authOptions);
