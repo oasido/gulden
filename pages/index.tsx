@@ -17,7 +17,6 @@ export const getServerSideProps = async ({
   res: NextApiResponse;
 }) => {
   const session = await unstable_getServerSession(req, res, authOptions);
-  console.log(session?.user?.email);
   if (session?.user?.email) {
     const client = await clientPromise;
     const db = client.db('gulden');
