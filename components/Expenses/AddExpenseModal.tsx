@@ -41,6 +41,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
       date: '',
       price: 0,
     },
+    validateInputOnChange: true,
   });
 
   const addExpense = async () => {
