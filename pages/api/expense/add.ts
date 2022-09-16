@@ -6,7 +6,7 @@ import clientPromise from '@lib/mongodb';
 
 const expenseSchema = z.object({
   user: z.string().trim().email(),
-  name: z.string().trim().min(2),
+  name: z.string().trim().min(2).max(25),
   date: z.string().trim().min(1, { message: 'Invalid date' }),
   price: z.number(),
 });

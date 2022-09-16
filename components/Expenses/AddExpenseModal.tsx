@@ -24,7 +24,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const expenseSchema = z.object({
-  name: z.string().trim().min(2),
+  name: z.string().trim().min(2).max(25),
   date: z.string().trim().min(1, { message: 'Invalid date' }),
   price: z.number(),
 });
