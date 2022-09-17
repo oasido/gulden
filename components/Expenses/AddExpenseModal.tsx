@@ -12,12 +12,14 @@ import {
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useForm, zodResolver } from '@mantine/form';
+import { DatePicker } from '@mantine/dates';
 import { z } from 'zod';
-import { FaEraser, FaCheckCircle } from 'react-icons/fa';
+import { FaEraser, FaCheckCircle, FaCalendar } from 'react-icons/fa';
 import { VscError } from 'react-icons/vsc';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { Expense } from 'types/generic';
+import { useMediaQuery } from '@mantine/hooks';
 
 const useStyles = createStyles((theme) => ({
   //,
@@ -25,7 +27,7 @@ const useStyles = createStyles((theme) => ({
 
 const expenseSchema = z.object({
   name: z.string().trim().min(2).max(25),
-  date: z.string().trim().min(1, { message: 'Invalid date' }),
+  date: z.date({ invalid_type_error: "That's not a date!" }),
   price: z.number(),
 });
 
@@ -33,12 +35,13 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
   const { classes, theme } = useStyles();
   const { data: session } = useSession();
   const [opened, setOpened] = useState<boolean>(false);
+  const isMobile = useMediaQuery('(max-width: 755px)');
 
   const form = useForm({
     validate: zodResolver(expenseSchema),
     initialValues: {
       name: '',
-      date: '',
+      date: new Date(),
       price: 0,
     },
     validateInputOnChange: true,
@@ -49,7 +52,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
 
     // check if there are any parse errors
     if (Object.keys(form.errors).length === 0 && form.isValid() && session) {
-      // Add API validation to check if this is a genuine request.
+      console.log(form.values.date);
       try {
         const result = await axios.post('/api/expense/add', {
           user: session.user?.email,
@@ -96,14 +99,19 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             description="What did you spend money on?"
             placeholder="Spent on..."
             my="xs"
+            withAsterisk
             {...form.getInputProps('name')}
             error={form.errors.name && form.errors.name}
           />
-          <TextInput
+
+          <DatePicker
             label="Date"
             description="When was the transaction?"
-            type="date"
+            firstDayOfWeek="sunday"
             my="xs"
+            dropdownType={isMobile ? 'modal' : 'popover'}
+            icon={<FaCalendar size={16} />}
+            withAsterisk
             {...form.getInputProps('date')}
             error={form.errors.date && form.errors.date}
           />
@@ -112,6 +120,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             description="How much did you pay?"
             defaultValue={0.0}
             my="xs"
+            withAsterisk
             precision={2}
             step={0.05}
             {...form.getInputProps('price')}

@@ -245,12 +245,12 @@
     "@radix-ui/react-scroll-area" "1.0.0"
     react-textarea-autosize "8.3.4"
 
-"@mantine/dates@^5.2.3":
-  version "5.2.3"
-  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-5.2.3.tgz#06c338318847e5308808505540d08f07c9e67dea"
-  integrity sha512-lmgA4WHvb0rffsgqfR8cK6ICb/d8TGzbcJ5PKQZyQjtgj2WBpMHsfZFKb3a3XscqRLfZHoCZFIAwsOEitDORXA==
+"@mantine/dates@^5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-5.3.3.tgz#724f8f1d06dba1dd4862d4e89783a80af94f2fa9"
+  integrity sha512-9iXw7H6Gbt4XBBKoDzlG2sxz6pUwqIzqXNgLME7xbTqMlrgy7FnyskTVU/GKBOkRyh9/MyPOUK+SfeyTPX/U4w==
   dependencies:
-    "@mantine/utils" "5.2.3"
+    "@mantine/utils" "5.3.3"
 
 "@mantine/form@^5.2.4":
   version "5.2.4"
@@ -306,6 +306,11 @@
   version "5.2.7"
   resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.2.7.tgz#be77f85ef9da02c9b93d3f2b83526a98257e87e0"
   integrity sha512-yJPe+fgfLnkwNxRQgLQfTxSS5Z3EKi+Zsf/udDw+akzJ8znyejfeJTk/pk+2TwEdIzSIiqh26ULd4yr/3v4UnQ==
+
+"@mantine/utils@5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.3.3.tgz#0006bd3aef7dc5f955517d02da611cb499c7e07c"
+  integrity sha512-UoIBNjsXI2j1Sv4oslhOhGORE0pkbwpJ42+55dVQjTXRzDsloYNssyad1xO+kS8icF0y3HV3i+nz3B8b04W00A==
 
 "@next/env@12.2.5":
   version "12.2.5"
@@ -931,6 +936,11 @@ damerau-levenshtein@^1.0.8:
   version "1.0.8"
   resolved "https://registry.yarnpkg.com/damerau-levenshtein/-/damerau-levenshtein-1.0.8.tgz#b43d286ccbd36bc5b2f7ed41caf2d0aba1f8a6e7"
   integrity sha512-sdQSFB7+llfUcQHUQO3+B8ERRj0Oa4w9POWMI/puGtuf7gFywGmkaLCElnudfTiKZV+NvHqL0ifzdrI8Ro7ESA==
+
+dayjs@^1.11.5:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.5.tgz#00e8cc627f231f9499c19b38af49f56dc0ac5e93"
+  integrity sha512-CAdX5Q3YW3Gclyo5Vpqkgpj8fSdLQcRuzfX6mC6Phy0nfJ0eGYOeS7m4mt2plDWLAtA4TqTakvbboHvUxfe4iA==
 
 debug@^2.6.9:
   version "2.6.9"
