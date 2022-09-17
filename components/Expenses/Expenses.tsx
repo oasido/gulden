@@ -22,8 +22,14 @@ import {
   ColumnDef,
   getFilteredRowModel,
 } from '@tanstack/react-table';
+import { FaTrashAlt } from 'react-icons/fa';
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles((theme) => ({
+  container: {
+    [theme.fn.largerThan('md')]: {
+      color: 'skyblue',
+    },
+  },
   title: {
     marginTop: '1rem',
     marginBottom: '1rem',
@@ -32,6 +38,24 @@ const useStyles = createStyles(() => ({
   sortable: {
     cursor: 'pointer',
     select: 'none',
+  },
+
+  table: {
+    [theme.fn.smallerThan('xs')]: {
+      color: 'red',
+    },
+  },
+
+  cell: {
+    wordWrap: 'break-word',
+  },
+
+  selectCol: {
+    width: '2rem',
+  },
+
+  dateCol: {
+    width: '7rem',
   },
 }));
 
@@ -108,72 +132,86 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
     debugTable: true,
   });
 
-  return (
-    <div>
-      <Container>
-        <Group position="apart">
-          <Title order={4} className={classes.title}>
-            Expenses
-          </Title>
-          <Group spacing="xs">
-            <Button
-              onClick={() =>
-                console.info('table.getSelectedFlatRows()', table.getSelectedRowModel().flatRows)
-              }
-            >
-              Log table.getSelectedFlatRows()
-            </Button>
-            <AddExpenseModal setData={setData} />
-          </Group>
-        </Group>
-        <Input
-          placeholder="Search..."
-          value={globalFilter || ''}
-          onChange={(evt: ChangeEvent<HTMLInputElement>) => setGlobalFilter(evt.target.value)}
-        />
-        <Table highlightOnHover fontSize="md" verticalSpacing="sm" mb={20}>
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id}>
-                    {header.isPlaceholder ? null : (
-                      <div
-                        {...{
-                          className: header.column.getCanSort() ? classes.sortable : '',
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+  const removeSelected = async () => {
+    if (table.getSelectedRowModel().flatRows.length > 0) {
+      // table.getSelectedRowModel().flatRows;
+      console.log(table.getSelectedRowModel().flatRows);
+    } else {
+    }
+  };
 
-        {table.getPrePaginationRowModel().rows.length === 0 && globalFilter !== '' && (
-          <Text size="lg">Nothing found.</Text>
-        )}
-        {table.getPrePaginationRowModel().rows.length === 0 && globalFilter === '' && (
-          <Text size="lg">Empty table.</Text>
-        )}
-      </Container>
+  return (
+    <div className={classes.container}>
+      <Group position="apart">
+        <Title order={4} className={classes.title}>
+          Expenses
+        </Title>
+        <Group spacing="xs">
+          <Button onClick={removeSelected} color="red" leftIcon={<FaTrashAlt />}>
+            Remove
+          </Button>
+          <AddExpenseModal setData={setData} />
+        </Group>
+      </Group>
+      <Input
+        placeholder="Search..."
+        value={globalFilter || ''}
+        onChange={(evt: ChangeEvent<HTMLInputElement>) => setGlobalFilter(evt.target.value)}
+      />
+      <Table
+        className={classes.table}
+        highlightOnHover
+        verticalSpacing="sm"
+        mb={20}
+        captionSide="bottom"
+      >
+        <caption>{new Date().toLocaleString()}</caption>
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header, idx) => (
+                <th
+                  className={`${idx === 0 && classes.selectCol} ${idx === 1 && classes.dateCol}`}
+                  key={header.id}
+                >
+                  {header.isPlaceholder ? null : (
+                    <div
+                      {...{
+                        className: header.column.getCanSort() ? classes.sortable : '',
+                        onClick: header.column.getToggleSortingHandler(),
+                      }}
+                    >
+                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {{
+                        asc: ' 🔼',
+                        desc: ' 🔽',
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </div>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id} className={classes.cell}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+
+      {table.getPrePaginationRowModel().rows.length === 0 && globalFilter !== '' && (
+        <Text size="lg">Nothing found.</Text>
+      )}
+      {table.getPrePaginationRowModel().rows.length === 0 && globalFilter === '' && (
+        <Text size="lg">Empty table.</Text>
+      )}
     </div>
   );
 };
