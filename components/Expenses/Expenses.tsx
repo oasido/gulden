@@ -23,11 +23,13 @@ import {
   getFilteredRowModel,
 } from '@tanstack/react-table';
 import { FaTrashAlt } from 'react-icons/fa';
+import dayjs from 'dayjs';
 
 const useStyles = createStyles((theme) => ({
   container: {
     [theme.fn.largerThan('md')]: {
       color: 'skyblue',
+      width: '60%',
     },
   },
   title: {
@@ -51,10 +53,18 @@ const useStyles = createStyles((theme) => ({
   },
 
   selectCol: {
-    width: '2rem',
+    width: '1rem',
   },
 
   dateCol: {
+    width: '7rem',
+  },
+
+  nameCol: {
+    width: '14rem',
+  },
+
+  priceCol: {
     width: '7rem',
   },
 }));
@@ -106,7 +116,11 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
           </div>
         ),
       },
-      { header: 'Date', accessorKey: 'date' },
+      {
+        header: 'Date',
+        accessorKey: 'date',
+        cell: (info) => dayjs(info.getValue()).format('M/D'),
+      },
       {
         header: 'Name',
         accessorKey: 'name',
@@ -171,7 +185,9 @@ export const Expenses = ({ expenses }: { expenses: string }) => {
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header, idx) => (
                 <th
-                  className={`${idx === 0 && classes.selectCol} ${idx === 1 && classes.dateCol}`}
+                  className={`${idx === 0 && classes.selectCol} ${idx === 1 && classes.dateCol} ${
+                    idx === 2 && classes.nameCol
+                  } ${idx === 3 && classes.priceCol}`}
                   key={header.id}
                 >
                   {header.isPlaceholder ? null : (
