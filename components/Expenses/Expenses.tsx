@@ -84,10 +84,10 @@ const IndeterminateCheckbox = ({
   return <Checkbox ref={ref} {...rest} />;
 };
 
-export const Expenses = ({ expenses }: { expenses: string }) => {
+export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
   const { classes } = useStyles();
 
-  const [data, setData] = useState(JSON.parse(expenses));
+  const [data, setData] = useState(expenses);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
