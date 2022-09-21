@@ -29,7 +29,7 @@ const useStyles = createStyles((theme) => ({
   container: {
     [theme.fn.largerThan('md')]: {
       color: 'skyblue',
-      width: '60%',
+      // width: '60%',
     },
   },
   title: {

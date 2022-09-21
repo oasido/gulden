@@ -1,6 +1,7 @@
 import type { NextPage } from 'next';
-import Expenses from '@components/Expenses';
 import { PageLayout } from '@components/PageLayout';
+import Expenses from '@components/Expenses';
+import ExpenseChart from '@components/ExpenseChart';
 import clientPromise from '@lib/mongodb';
 import { Text } from '@mantine/core';
 import { useSession } from 'next-auth/react';
@@ -43,7 +44,10 @@ const Home: NextPage<{ expenseData: string }> = ({ expenseData }) => {
   return (
     <PageLayout>
       {session ? (
-        <Expenses expenses={expenseData} />
+        <>
+          <ExpenseChart />
+          <Expenses expenses={expenseData} />
+        </>
       ) : (
         <Text mt="lg">You need to log in first!</Text>
       )}
