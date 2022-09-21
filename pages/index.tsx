@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { PageLayout } from '@components/PageLayout';
 import Expenses from '@components/Expenses';
-import ExpenseChart from '@components/ExpenseChart';
+import Statistics from '@components/Statistics';
 import clientPromise from '@lib/mongodb';
 import { Text } from '@mantine/core';
 import { useSession } from 'next-auth/react';
@@ -9,6 +9,7 @@ import { useStore } from '@context/useStore';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from './api/auth/[...nextauth]';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Expense } from 'types/generic';
 
 export const getServerSideProps = async ({
   req,
@@ -41,12 +42,14 @@ export const getServerSideProps = async ({
 const Home: NextPage<{ expenseData: string }> = ({ expenseData }) => {
   const { data: session } = useSession();
 
+  const parsedExpenses: Expense[] = JSON.parse(expenseData);
+
   return (
     <PageLayout>
       {session ? (
         <>
-          <ExpenseChart />
-          <Expenses expenses={expenseData} />
+          <Statistics expenses={parsedExpenses} />
+          <Expenses expenses={parsedExpenses} />
         </>
       ) : (
         <Text mt="lg">You need to log in first!</Text>
