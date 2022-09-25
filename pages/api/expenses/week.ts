@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@lib/mongodb';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
-import { eachDayOfInterval, format, isSameDay, subDays } from 'date-fns';
+import { addDays, eachDayOfInterval, format, isSameDay, subDays } from 'date-fns';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await unstable_getServerSession(req, res, authOptions);
@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const db = client.db('gulden');
       const collection = db.collection('expenses');
 
-      const date = new Date(new Date().setHours(0, 0, 0, 0));
+      const date = addDays(new Date(), 1);
       const weekPastNow = subDays(date, 7);
 
       const dbQueryResult = await collection
@@ -41,7 +41,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .toArray();
 
       const getLastWeekArray = () => {
-        const date = new Date(new Date().setHours(0, 0, 0, 0));
+        // const date = new Date(new Date().setHours(0, 0, 0, 0));
+        const date = addDays(new Date(), 1);
         const weekPastNow = subDays(date, 7);
 
         const weekArray = eachDayOfInterval({
