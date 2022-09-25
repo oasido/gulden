@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const { user, date, name, price }: Expense = req.body;
       const parsedDate = new Date(date);
 
-      if (parsedDate.toString() === 'Invalid Date') {
+      if (parsedDate.toISOString() === 'Invalid Date') {
         res.status(400).json('Invalid date, what are you trying to do?');
       }
 
