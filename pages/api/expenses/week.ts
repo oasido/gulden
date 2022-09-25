@@ -11,9 +11,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (session) {
     if (req.method === 'GET') {
-      const { user } = req.body;
-      // TODO: Show only user specific data
-
       const client = await clientPromise;
       const db = client.db('gulden');
       const collection = db.collection('expenses');
@@ -25,6 +22,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .aggregate([
           {
             $match: {
+              user: {
+                $eq: session.user?.email,
+              },
               date: {
                 $gte: weekPastNow,
                 $lte: date,
