@@ -65,11 +65,11 @@ export const ExpenseChart = () => {
   // useMemo(() => getChartData(), []);
 
   const chartData = {
-    labels,
+    labels: data?.labels,
     datasets: [
       {
         label: 'Expenses',
-        data: expenses,
+        data: data?.spendings,
         backgroundColor: 'rgba(255, 99, 132, 0.55)',
       },
     ],
