@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@lib/mongodb';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
+import { parseISO } from 'date-fns';
 
 const expenseSchema = z.object({
   user: z.string().trim().email(),
@@ -25,7 +26,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         res.status(400).json('Invalid date, what are you trying to do?');
       }
 
-      const parse = expenseSchema.safeParse({ user, date: parsedDate, name, price });
+      const parse = expenseSchema.safeParse({
+        user,
+        date: parsedDate,
+        name,
+        price,
+      });
       if (parse.success === false) {
         res.status(400).json(parse.error.errors);
         return;
@@ -34,7 +40,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const client = await clientPromise;
       const db = client.db('gulden');
       const collection = db.collection('expenses');
-      const response = await collection.insertOne({ user, date: parsedDate, name, price });
+      const response = await collection.insertOne({
+        user,
+        date: parseISO(date),
+        name,
+        price,
+      });
+
       res.status(200).json(response);
     } else {
       res.status(400).json('Error code 400, bad request method.');
