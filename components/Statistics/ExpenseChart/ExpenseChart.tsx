@@ -41,7 +41,7 @@ export const ExpenseChart = () => {
   const [labels, setLabels] = useState<string[]>([]);
   const [expenses, setExpenses] = useState<number[]>([]);
 
-  const chartFetcher = async (url: string) => await axios.get(url);
+  const chartFetcher = (url: string) => axios.get(url).then((res) => res.data);
 
   const { data, error } = useSWR('/api/expenses/week', chartFetcher);
 
