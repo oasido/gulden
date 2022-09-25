@@ -55,11 +55,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         return weekArray;
       };
 
-      const responseData = getLastWeekArray().map((day) => {
+      const expenses = getLastWeekArray().map((day) => {
         const { date } = day;
 
         const parsedObj = dbQueryResult.find((o: ExpenseSearchQueryResult, idx: number) => {
-          console.log(o._id);
           const isFound = isSameDay(o._id, date);
           if (isFound) {
             dbQueryResult.splice(idx, 1);
@@ -70,15 +69,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         if (parsedObj === undefined) {
           return { ...day, spent: 0 };
         } else {
-          return { ...day, date: parsedObj._id, spent: parsedObj.spent };
+          return { ...day, spent: parsedObj.spent };
         }
       });
 
-      // const getExpensesDataArr: number[] = responseData.map((day) => day.spent);
+      const spendings: number[] = expenses.map((day) => day.spent);
 
-      // const getExpensesLabelsArr: string[] = responseData.map((day) => day.label);
+      const labels: string[] = expenses.map((day) => day.label);
 
-      res.status(200).json(responseData);
+      res.status(200).json({ spendings, labels });
     } else {
       res.status(400).json('Error code 400, bad request method.');
     }
