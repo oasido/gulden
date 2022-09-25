@@ -43,26 +43,7 @@ export const ExpenseChart = () => {
 
   const chartFetcher = (url: string) => axios.get(url).then((res) => res.data);
 
-  const { data, error } = useSWR('/api/expenses/week', chartFetcher);
-
-  // const getChartData = async () => {
-  //   const response = await axios.get('/api/expenses/week');
-
-  //   if (response.status === 200) {
-  //     const getExpensesData: number[] = response.data.map(
-  //       (day: ExpenseSearchQueryResult) => day.spent
-  //     );
-
-  //     const getExpensesLabels: string[] = response.data.map(
-  //       (day: ExpenseSearchQueryResult) => day.label
-  //     );
-  //     setExpenses(getExpensesData);
-  //     setLabels(getExpensesLabels);
-  //     console.log(expenses, labels);
-  //   }
-  // };
-
-  // useMemo(() => getChartData(), []);
+  const { data, error } = useSWR('/api/expenses/week', chartFetcher, { refreshInterval: 5000 });
 
   const chartData = {
     labels: data?.labels,
