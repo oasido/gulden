@@ -1,5 +1,4 @@
 import { createStyles } from '@mantine/core';
-import { getWeekdaysNames, isSameMonth } from '@mantine/dates';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,11 +8,11 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Expense } from 'types/generic';
-import dayjs from 'dayjs';
 import axios from 'axios';
+import { ExpenseSearchQueryResult } from 'types/generic';
+import useSWR from 'swr';
 
 const useStyles = createStyles((theme) => ({
   chart: {
@@ -21,12 +20,8 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export const ExpenseChart = ({ expenses }: { expenses: Expense[] }) => {
+export const ExpenseChart = () => {
   const { classes } = useStyles();
-
-  // const getMonthlyExpenseData = (amount: number): number[] => {
-  //   axios.get(`/api/expense/list/${amount}`);
-  // };
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -42,25 +37,43 @@ export const ExpenseChart = ({ expenses }: { expenses: Expense[] }) => {
       },
     },
   };
-  const [before, setBefore] = useState<'week' | 'month' | 'year'>('week');
 
-  const [labels, setLabels] = useState(getWeekdaysNames('en', 'sunday'));
+  const [labels, setLabels] = useState<string[]>([]);
+  const [expenses, setExpenses] = useState<number[]>([]);
 
-  const getRelevantDates = async () => {
-    const response = await axios.get('/api/expenses/week');
-    console.log(response.data);
-  };
+  const chartFetcher = async (url: string) => await axios.get(url);
 
-  const data = {
+  const { data, error } = useSWR('/api/expenses/week', chartFetcher);
+
+  // const getChartData = async () => {
+  //   const response = await axios.get('/api/expenses/week');
+
+  //   if (response.status === 200) {
+  //     const getExpensesData: number[] = response.data.map(
+  //       (day: ExpenseSearchQueryResult) => day.spent
+  //     );
+
+  //     const getExpensesLabels: string[] = response.data.map(
+  //       (day: ExpenseSearchQueryResult) => day.label
+  //     );
+  //     setExpenses(getExpensesData);
+  //     setLabels(getExpensesLabels);
+  //     console.log(expenses, labels);
+  //   }
+  // };
+
+  // useMemo(() => getChartData(), []);
+
+  const chartData = {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
-        data: [5, 5, 14, 32, 1, 2, 0],
+        label: 'Expenses',
+        data: expenses,
         backgroundColor: 'rgba(255, 99, 132, 0.55)',
       },
     ],
   };
 
-  return <Bar options={options} data={data} />;
+  return <Bar options={options} data={chartData} />;
 };
