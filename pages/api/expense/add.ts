@@ -53,7 +53,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     console.log('Session', JSON.stringify(session, null, 2));
   } else {
-    // Not Signed in
     res.status(401).json('Unauthorized request.');
   }
 };
