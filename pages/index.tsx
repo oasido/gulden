@@ -25,6 +25,7 @@ export const getServerSideProps = async ({
     const expenseData = await db
       .collection('expenses')
       .find({ user: session.user.email })
+      .sort({ date: -1 })
       .toArray();
 
     return {
