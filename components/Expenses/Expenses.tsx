@@ -6,7 +6,6 @@ import {
   Input,
   Button,
   Group,
-  Container,
   Text,
   Checkbox,
   CheckboxProps,
@@ -23,13 +22,12 @@ import {
   getFilteredRowModel,
 } from '@tanstack/react-table';
 import { FaTrashAlt } from 'react-icons/fa';
-import dayjs from 'dayjs';
+import { format } from 'date-fns';
 
 const useStyles = createStyles((theme) => ({
   container: {
     [theme.fn.largerThan('md')]: {
       color: 'skyblue',
-      // width: '60%',
     },
   },
   title: {
@@ -119,7 +117,10 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
       {
         header: 'Date',
         accessorKey: 'date',
-        cell: (info) => dayjs(info.getValue()).format('M/D'),
+        cell: (info) => {
+          const date = new Date(info.row.original.date);
+          return format(date, 'dd/MM');
+        },
       },
       {
         header: 'Name',
