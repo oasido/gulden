@@ -92,11 +92,12 @@ export const Chart: FC<{ timePeriod: TimePeriod; chartType: ChartType }> = ({
 
   if (error) return <div>Failed to load</div>;
 
-  if (chartType === 'bar') {
-    return <Bar options={options} data={chartData} />;
-  }
-
-  if (chartType === 'area') {
-    return <Line options={options} data={chartData} />;
+  switch (chartType) {
+    case 'bar':
+      return <Bar options={options} data={chartData} />;
+    case 'area':
+      return <Line options={options} data={chartData} />;
+    default:
+      return <Bar options={options} data={chartData} />;
   }
 };
