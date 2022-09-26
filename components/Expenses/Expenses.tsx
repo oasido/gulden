@@ -27,7 +27,7 @@ import { format } from 'date-fns';
 const useStyles = createStyles((theme) => ({
   container: {
     [theme.fn.largerThan('md')]: {
-      color: 'skyblue',
+      // color: 'skyblue',
     },
   },
   title: {

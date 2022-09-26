@@ -4,7 +4,6 @@ import { Expense } from 'types/generic';
 interface Store {
   expenses: Expense[];
   setExpenses: (expenses: Expense[]) => void;
-  addExpense: (expense: Expense) => void;
 }
 
 /* Warning:
@@ -15,8 +14,4 @@ interface Store {
 export const useStore = create<Store>((set) => ({
   expenses: [],
   setExpenses: (expenses: Expense[]) => set(() => ({ expenses: expenses })),
-  addExpense: (expense: Expense) => {
-    set((state) => ({ expenses: [...state.expenses, expense] }));
-  },
-  // removeExpense: (id: string) => set((state) => ({})),
 }));
