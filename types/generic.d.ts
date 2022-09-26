@@ -12,3 +12,13 @@ export interface User {
   email: string;
   image: string;
 }
+
+export interface ExpenseSearchQueryResult {
+  _id: Date;
+  label: string;
+  spent?: number;
+}
+
+export type TimePeriod = 'week' | 'month' | 'year' | 'all';
+
+export type ChartType = 'bar' | 'area';
