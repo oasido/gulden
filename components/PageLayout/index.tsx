@@ -10,7 +10,7 @@ export const PageLayout: FunctionComponent<Props> = ({ children }) => {
   return (
     <>
       <Navbar />
-      <Container size="xl">{children}</Container>
+      <Container>{children}</Container>
     </>
   );
 };

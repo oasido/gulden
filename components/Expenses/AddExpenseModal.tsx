@@ -20,6 +20,7 @@ import axios from 'axios';
 import { useSession } from 'next-auth/react';
 import { Expense } from 'types/generic';
 import { useMediaQuery } from '@mantine/hooks';
+import { addMinutes } from 'date-fns';
 
 const useStyles = createStyles((theme) => ({
   //,
@@ -52,11 +53,23 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
 
     // check if there are any parse errors
     if (Object.keys(form.errors).length === 0 && form.isValid() && session) {
-      console.log(form.values.date);
       try {
+        const calcOffset = () => {
+          const date = new Date();
+          const currentDayMinutes = date.getMinutes();
+          const timeZoneOffset = date.getTimezoneOffset();
+
+          if (timeZoneOffset > 0) {
+            return currentDayMinutes + timeZoneOffset;
+          } else {
+            return currentDayMinutes - timeZoneOffset;
+          }
+        };
+
         const result = await axios.post('/api/expense/add', {
           user: session.user?.email,
           ...form.values,
+          date: addMinutes(form.values.date, calcOffset()),
         });
 
         if (result.status === 200) {
@@ -67,7 +80,11 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             autoClose: 5000,
           });
           setData((data: Expense[]) => [
-            { _id: result.data.insertId, user: session.user?.email, ...form.values },
+            {
+              _id: result.data.insertId,
+              user: session.user?.email,
+              ...form.values,
+            },
             ...data,
           ]);
           form.reset();
