@@ -1,10 +1,11 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Tabs, SegmentedControl, createStyles } from '@mantine/core';
+import { Tabs, SegmentedControl, createStyles, Grid, Title } from '@mantine/core';
 import Chart from './Chart';
 import { ChartType, Expense, TimePeriod } from 'types/generic';
 import { AiOutlineBarChart, AiOutlineAreaChart } from 'react-icons/ai';
 import axios from 'axios';
 import useSWR from 'swr';
+import { Totals } from './Totals';
 
 const useStyles = createStyles((theme) => ({
   segmentedControls: {
@@ -51,13 +52,13 @@ const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
           data={[
             { label: 'Last week', value: 'week' },
             { label: 'Month', value: 'month' },
-            { label: '6 Months', value: 'year' },
             { label: 'Year', value: 'all' },
           ]}
         />
       </div>
 
       <Tabs value={chartType} onTabChange={setChartType as Dispatch<SetStateAction<string | null>>}>
+        <Totals data={data} />
         <Tabs.List>
           {AVAILABLE_CHARTS.map((chart) => (
             <Tabs.Tab key={chart.type} value={chart.type} icon={chart.icon}>
@@ -69,8 +70,6 @@ const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
         <Tabs.Panel value={chartType}>
           <Chart data={data} error={error} chartType={chartType} />
         </Tabs.Panel>
-
-        <Tabs.Panel value="second">Second panel</Tabs.Panel>
       </Tabs>
     </>
   );

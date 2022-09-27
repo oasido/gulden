@@ -19,7 +19,7 @@ export interface ExpenseSearchQueryResult {
   spent?: number;
 }
 
-export type TimePeriod = 'week' | 'month' | 'year' | 'all';
+export type TimePeriod = 'week' | 'month' | 'year';
 
 export type ChartType = 'bar' | 'area';
 
