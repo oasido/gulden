@@ -50,7 +50,7 @@ export const Chart: FC<{ data: any; error: any; chartType: ChartType }> = ({
       },
       title: {
         display: true,
-        text: 'Chart.js Bar Chart',
+        text: 'Expense Report',
       },
     },
   };
