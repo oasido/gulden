@@ -1,5 +1,4 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import type { Expense, ExpenseSearchQueryResult } from 'types/generic';
+import type { ExpenseSearchQueryResult, IParsedExpense } from 'types/generic';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@lib/mongodb';
 import { unstable_getServerSession } from 'next-auth/next';
@@ -40,12 +39,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         ])
         .toArray();
 
-      const getLastWeekArray = () => {
-        // const date = new Date(new Date().setHours(0, 0, 0, 0));
+      const generateLastWeekArray = () => {
         const date = addDays(new Date(), 1);
         const weekPastNow = subDays(date, 7);
 
-        const weekArray = eachDayOfInterval({
+        const lastWeek = eachDayOfInterval({
           start: weekPastNow,
           end: date,
         }).map((day) => ({
@@ -53,24 +51,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           date: day,
         }));
 
-        return weekArray;
+        return lastWeek;
       };
 
-      const expenses = getLastWeekArray().map((day) => {
+      const expenses = generateLastWeekArray().map((day) => {
         const { date } = day;
 
-        const parsedObj = dbQueryResult.find((o: ExpenseSearchQueryResult, idx: number) => {
-          const isFound = isSameDay(o._id, date);
-          if (isFound) {
-            dbQueryResult.splice(idx, 1);
-            return isFound;
+        const parsedWeek: IParsedExpense = dbQueryResult.find(
+          (o: ExpenseSearchQueryResult, idx: number) => {
+            const isFound = isSameDay(o._id, date);
+            if (isFound) {
+              dbQueryResult.splice(idx, 1);
+              return isFound;
+            }
           }
-        });
+        );
 
-        if (parsedObj === undefined) {
+        if (parsedWeek === undefined) {
           return { ...day, spent: 0 };
         } else {
-          return { ...day, spent: parsedObj.spent };
+          return { ...day, spent: parsedWeek.spent };
         }
       });
 
