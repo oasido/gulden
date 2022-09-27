@@ -22,3 +22,9 @@ export interface ExpenseSearchQueryResult {
 export type TimePeriod = 'week' | 'month' | 'year' | 'all';
 
 export type ChartType = 'bar' | 'area';
+
+interface IParsedExpense {
+  label: string;
+  date: Date;
+  spent: number;
+}
