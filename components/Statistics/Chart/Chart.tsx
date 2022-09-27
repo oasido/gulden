@@ -1,4 +1,3 @@
-import { createStyles } from '@mantine/core';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -12,30 +11,15 @@ import {
   Filler,
   ChartComponentLike,
 } from 'chart.js';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
-import axios from 'axios';
-import { ChartType, TimePeriod } from 'types/generic';
-import useSWR from 'swr';
+import { ChartType } from 'types/generic';
 
-const useStyles = createStyles((theme) => ({
-  chart: {
-    position: 'absolute',
-  },
-}));
-
-export const Chart: FC<{ timePeriod: TimePeriod; chartType: ChartType }> = ({
-  timePeriod,
+export const Chart: FC<{ data: any; error: any; chartType: ChartType }> = ({
+  data,
+  error,
   chartType,
 }): JSX.Element => {
-  const { classes } = useStyles();
-
-  const chartFetcher = (url: string) => axios.get(url).then((res) => res.data);
-
-  const { data, error } = useSWR(`/api/expenses/${timePeriod}`, chartFetcher, {
-    refreshInterval: 5000,
-  });
-
   const registerChart = (chartType: ChartType): ChartComponentLike => {
     switch (chartType) {
       case 'bar':

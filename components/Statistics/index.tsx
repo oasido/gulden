@@ -3,6 +3,8 @@ import { Tabs, SegmentedControl, createStyles } from '@mantine/core';
 import Chart from './Chart';
 import { ChartType, Expense, TimePeriod } from 'types/generic';
 import { AiOutlineBarChart, AiOutlineAreaChart } from 'react-icons/ai';
+import axios from 'axios';
+import useSWR from 'swr';
 
 const useStyles = createStyles((theme) => ({
   segmentedControls: {
@@ -29,6 +31,12 @@ const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
     { label: 'Bar Chart', type: 'bar', icon: <AiOutlineBarChart /> },
     { label: 'Area Chart', type: 'area', icon: <AiOutlineAreaChart /> },
   ];
+
+  const chartFetcher = (url: string) => axios.get(url).then((res) => res.data);
+
+  const { data, error } = useSWR(`/api/expenses/${timePeriod}`, chartFetcher, {
+    refreshInterval: 5000,
+  });
 
   return (
     <>
@@ -59,7 +67,7 @@ const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
         </Tabs.List>
 
         <Tabs.Panel value={chartType}>
-          <Chart chartType={chartType} timePeriod={timePeriod} />
+          <Chart data={data} error={error} chartType={chartType} />
         </Tabs.Panel>
 
         <Tabs.Panel value="second">Second panel</Tabs.Panel>
