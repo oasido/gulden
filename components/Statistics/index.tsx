@@ -58,7 +58,6 @@ const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
       </div>
 
       <Tabs value={chartType} onTabChange={setChartType as Dispatch<SetStateAction<string | null>>}>
-        <Totals data={data} />
         <Tabs.List>
           {AVAILABLE_CHARTS.map((chart) => (
             <Tabs.Tab key={chart.type} value={chart.type} icon={chart.icon}>
