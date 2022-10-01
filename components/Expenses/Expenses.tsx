@@ -147,8 +147,10 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
 
   const removeSelected = async () => {
     if (table.getSelectedRowModel().flatRows.length > 0) {
-      // table.getSelectedRowModel().flatRows;
-      console.log(table.getSelectedRowModel().flatRows);
+      const rowsToRemove = new Set(table.getSelectedRowModel().flatRows.map((row) => row.original));
+      // TODO: remove from db and update state only when successful
+      setData((previous) => previous.filter((row) => !rowsToRemove.has(row)));
+      table.toggleAllRowsSelected(false);
     }
   };
 
