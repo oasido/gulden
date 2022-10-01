@@ -5,19 +5,21 @@ import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
 import { eachDayOfInterval, endOfMonth, format, isSameDay, startOfMonth } from 'date-fns';
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
+const handler = async (request: NextApiRequest, response: NextApiResponse) => {
+  const session = await unstable_getServerSession(request, response, authOptions);
 
   if (session) {
-    if (req.method === 'GET') {
+    if (request.method === 'GET') {
       const client = await clientPromise;
-      const db = client.db('gulden');
-      const collection = db.collection('expenses');
+      const database = client.db('gulden');
+      const collection = database.collection('expenses');
 
-      const date = endOfMonth(new Date());
-      const weekPastNow = startOfMonth(date);
+      const monthStart = startOfMonth(new Date());
+      const monthEnd = endOfMonth(monthStart);
 
-      const dbQueryResult = await collection
+      console.log(monthStart, monthEnd);
+
+      const databaseQueryResult = await collection
         .aggregate([
           {
             $match: {
@@ -25,8 +27,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 $eq: session.user?.email,
               },
               date: {
-                $gte: weekPastNow,
-                $lte: date,
+                $gte: monthStart,
+                $lte: monthEnd,
               },
             },
           },
@@ -40,12 +42,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .toArray();
 
       const generateMonthArray = () => {
-        const date = endOfMonth(new Date());
-        const weekPastNow = startOfMonth(date);
+        const monthStart = startOfMonth(new Date());
+        const monthEnd = endOfMonth(monthStart);
+        console.log(monthStart, monthEnd);
 
         const month = eachDayOfInterval({
-          start: weekPastNow,
-          end: date,
+          start: monthStart,
+          end: monthEnd,
         }).map((day) => ({
           label: format(day, 'dd/MM'),
           date: day,
@@ -57,33 +60,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       const expenses = generateMonthArray().map((day) => {
         const { date } = day;
 
-        const parsedMonth: IParsedExpense = dbQueryResult.find(
-          (o: ExpenseSearchQueryResult, idx: number) => {
+        const parsedMonth: IParsedExpense = databaseQueryResult.find(
+          (o: ExpenseSearchQueryResult, index: number) => {
             const isFound = isSameDay(o._id, date);
             if (isFound) {
-              dbQueryResult.splice(idx, 1);
+              databaseQueryResult.splice(index, 1);
               return isFound;
             }
           }
         );
 
-        if (parsedMonth === undefined) {
-          return { ...day, spent: 0 };
-        } else {
-          return { ...day, spent: parsedMonth.spent };
-        }
+        return parsedMonth === undefined
+          ? { ...day, spent: 0 }
+          : { ...day, spent: parsedMonth.spent };
       });
 
       const spendings: number[] = expenses.map((day) => day.spent);
 
       const labels: string[] = expenses.map((day) => day.label);
 
-      res.status(200).json({ spendings, labels });
+      response.status(200).json({ spendings, labels });
     } else {
-      res.status(400).json('Error code 400, bad request method.');
+      response.status(400).json('Error code 400, bad request method.');
     }
   } else {
-    res.status(401).json('Unauthorized request.');
+    response.status(401).json('Unauthorized request.');
   }
 };
 
