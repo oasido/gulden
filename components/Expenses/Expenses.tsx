@@ -24,7 +24,7 @@ import {
 import { FaTrashAlt } from 'react-icons/fa';
 import { format } from 'date-fns';
 
-const useStyles = createStyles((theme, getRef) => ({
+const useStyles = createStyles((theme, getReference) => ({
   container: {},
   title: {
     marginTop: '1rem',
@@ -69,15 +69,15 @@ const IndeterminateCheckbox = ({
   indeterminate,
   ...rest
 }: { indeterminate?: boolean } & Partial<CheckboxProps>) => {
-  const ref: any = useRef(null!);
+  const reference: any = useRef(null!);
 
   useEffect(() => {
     if (typeof indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate;
+      reference.current.indeterminate = !rest.checked && indeterminate;
     }
-  }, [ref, indeterminate]);
+  }, [reference, indeterminate]);
 
-  return <Checkbox ref={ref} {...rest} />;
+  return <Checkbox ref={reference} {...rest} />;
 };
 
 export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
@@ -149,7 +149,6 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
     if (table.getSelectedRowModel().flatRows.length > 0) {
       // table.getSelectedRowModel().flatRows;
       console.log(table.getSelectedRowModel().flatRows);
-    } else {
     }
   };
 
@@ -169,7 +168,7 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
       <Input
         placeholder="Search..."
         value={globalFilter || ''}
-        onChange={(evt: ChangeEvent<HTMLInputElement>) => setGlobalFilter(evt.target.value)}
+        onChange={(event_: ChangeEvent<HTMLInputElement>) => setGlobalFilter(event_.target.value)}
       />
 
       <div className={classes.tableWrap}>
