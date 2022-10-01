@@ -5,8 +5,8 @@ import { BiLogOutCircle } from 'react-icons/bi';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
-    // backgroundColor: theme.colors.dark[4],
-    borderBottom: `0.2rem solid ${theme.colors.dark[5]}`,
+    backgroundColor: theme.colors.dark[8],
+    borderBottom: `0.2rem solid ${theme.colors.dark[6]}`,
     padding: '0.8rem',
     display: 'flex',
     justifyContent: 'space-between',

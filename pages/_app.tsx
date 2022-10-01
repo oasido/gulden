@@ -3,6 +3,7 @@ import Head from 'next/head';
 import { MantineProvider } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { SessionProvider } from 'next-auth/react';
+import '../styles/globals.css';
 
 export default function App(props: AppProps) {
   const {

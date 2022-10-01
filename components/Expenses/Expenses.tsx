@@ -24,12 +24,8 @@ import {
 import { FaTrashAlt } from 'react-icons/fa';
 import { format } from 'date-fns';
 
-const useStyles = createStyles((theme) => ({
-  container: {
-    [theme.fn.largerThan('md')]: {
-      // color: 'skyblue',
-    },
-  },
+const useStyles = createStyles((theme, getRef) => ({
+  container: {},
   title: {
     marginTop: '1rem',
     marginBottom: '1rem',
@@ -40,9 +36,11 @@ const useStyles = createStyles((theme) => ({
     select: 'none',
   },
 
-  table: {
-    [theme.fn.smallerThan('xs')]: {
-      color: 'red',
+  tableWrap: {
+    [theme.fn.largerThan('md')]: {
+      maxHeight: 'calc(100vh - 195px)',
+      height: 'calc(100vh - 195px)',
+      overflow: 'auto',
     },
   },
 
@@ -173,62 +171,58 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
         value={globalFilter || ''}
         onChange={(evt: ChangeEvent<HTMLInputElement>) => setGlobalFilter(evt.target.value)}
       />
-      <Table
-        className={classes.table}
-        highlightOnHover
-        verticalSpacing="sm"
-        mb={20}
-        captionSide="bottom"
-      >
-        <caption>{new Date().toLocaleString()}</caption>
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header, idx) => (
-                <th
-                  className={`${idx === 0 && classes.selectCol} ${idx === 1 && classes.dateCol} ${
-                    idx === 2 && classes.nameCol
-                  } ${idx === 3 && classes.priceCol}`}
-                  key={header.id}
-                >
-                  {header.isPlaceholder ? null : (
-                    <div
-                      {...{
-                        className: header.column.getCanSort() ? classes.sortable : '',
-                        onClick: header.column.getToggleSortingHandler(),
-                      }}
-                    >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {{
-                        asc: ' 🔼',
-                        desc: ' 🔽',
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </div>
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className={classes.cell}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </Table>
 
-      {table.getPrePaginationRowModel().rows.length === 0 && globalFilter !== '' && (
-        <Text size="lg">Nothing found.</Text>
-      )}
-      {table.getPrePaginationRowModel().rows.length === 0 && globalFilter === '' && (
-        <Text size="lg">Empty table.</Text>
-      )}
+      <div className={classes.tableWrap}>
+        <Table highlightOnHover verticalSpacing="sm" mb={20} captionSide="bottom">
+          <caption>{new Date().toLocaleString()}</caption>
+          <thead>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header, idx) => (
+                  <th
+                    className={`${idx === 0 && classes.selectCol} ${idx === 1 && classes.dateCol} ${
+                      idx === 2 && classes.nameCol
+                    } ${idx === 3 && classes.priceCol}`}
+                    key={header.id}
+                  >
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort() ? classes.sortable : '',
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: ' 🔼',
+                          desc: ' 🔽',
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((row) => (
+              <tr key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className={classes.cell}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        {table.getPrePaginationRowModel().rows.length === 0 && globalFilter !== '' && (
+          <Text size="lg">Nothing found.</Text>
+        )}
+        {table.getPrePaginationRowModel().rows.length === 0 && globalFilter === '' && (
+          <Text size="lg">Empty table.</Text>
+        )}
+      </div>
     </div>
   );
 };

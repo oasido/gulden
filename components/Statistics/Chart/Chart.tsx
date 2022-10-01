@@ -44,13 +44,10 @@ export const Chart: FC<{ data: any; error: any; chartType: ChartType }> = ({
 
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
-      },
-      title: {
-        display: true,
-        text: 'Expense Report',
+        position: 'bottom' as const,
       },
     },
   };

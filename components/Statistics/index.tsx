@@ -14,9 +14,18 @@ const useStyles = createStyles((theme) => ({
       margin: '0 auto',
     },
   },
+
+  chart: {
+    [theme.fn.smallerThan('md')]: {
+      height: '17rem',
+    },
+    [theme.fn.largerThan('md')]: {
+      height: '25rem',
+    },
+  },
 }));
 
-const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
+const Statistics = ({ expenses }: { expenses: Expense[] }): JSX.Element => {
   const { classes } = useStyles();
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('week');
   const [chartType, setChartType] = useState<ChartType>('bar');
@@ -57,20 +66,9 @@ const Statistics: FC<{ expenses: Expense[] }> = ({ expenses }) => {
         />
       </div>
 
-      <Tabs value={chartType} onTabChange={setChartType as Dispatch<SetStateAction<string | null>>}>
-        <Totals data={data} />
-        <Tabs.List>
-          {AVAILABLE_CHARTS.map((chart) => (
-            <Tabs.Tab key={chart.type} value={chart.type} icon={chart.icon}>
-              {chart.label}
-            </Tabs.Tab>
-          ))}
-        </Tabs.List>
-
-        <Tabs.Panel value={chartType}>
-          <Chart data={data} error={error} chartType={chartType} />
-        </Tabs.Panel>
-      </Tabs>
+      <div className={classes.chart}>
+        <Chart data={data} error={error} chartType={chartType} />
+      </div>
     </>
   );
 };
