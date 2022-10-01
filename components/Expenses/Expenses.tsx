@@ -219,7 +219,9 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
           <Text size="lg">Nothing found.</Text>
         )}
         {table.getPrePaginationRowModel().rows.length === 0 && globalFilter === '' && (
-          <Text size="lg">Empty table.</Text>
+          <Text size="lg">
+            Expense table is empty. Click {`'Add'`} to start tracking your expenses.
+          </Text>
         )}
       </div>
     </div>
