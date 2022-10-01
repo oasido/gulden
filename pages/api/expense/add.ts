@@ -51,7 +51,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } else {
       res.status(400).json('Error code 400, bad request method.');
     }
-    console.log('Session', JSON.stringify(session, null, 2));
   } else {
     res.status(401).json('Unauthorized request.');
   }

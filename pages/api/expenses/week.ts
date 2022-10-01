@@ -44,8 +44,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
         const today = endOfDay(new Date());
         const weekPastNow = subDays(today, 7);
 
-        console.log(weekPastNow, today);
-
         const lastWeek = eachDayOfInterval({
           start: weekPastNow,
           end: today,

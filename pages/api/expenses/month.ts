@@ -17,8 +17,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
       const monthStart = startOfMonth(new Date());
       const monthEnd = endOfMonth(monthStart);
 
-      console.log(monthStart, monthEnd);
-
       const databaseQueryResult = await collection
         .aggregate([
           {
@@ -44,7 +42,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
       const generateMonthArray = () => {
         const monthStart = startOfMonth(new Date());
         const monthEnd = endOfMonth(monthStart);
-        console.log(monthStart, monthEnd);
 
         const month = eachDayOfInterval({
           start: monthStart,
