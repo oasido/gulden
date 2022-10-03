@@ -171,6 +171,7 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
         placeholder="Search..."
         value={globalFilter || ''}
         onChange={(event_: ChangeEvent<HTMLInputElement>) => setGlobalFilter(event_.target.value)}
+        mb={10}
       />
 
       <div className={classes.tableWrap}>
