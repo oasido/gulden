@@ -62,9 +62,8 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
       const expenses = generateYearByMonthArray().map((day) => {
         const { date } = day;
 
-        const parsedMonth: IParsedExpense = databaseQueryResult.find(
+        const parsedYearMonths: IParsedExpense = databaseQueryResult.find(
           (o: ExpenseSearchQueryResult, index: number) => {
-            console.log(new Date(o._id));
             const isFound = isSameMonth(new Date(o._id), date);
             if (isFound) {
               databaseQueryResult.splice(index, 1);
@@ -73,9 +72,9 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
           }
         );
 
-        return parsedMonth === undefined
+        return parsedYearMonths === undefined
           ? { ...day, spent: 0 }
-          : { ...day, spent: parsedMonth.spent };
+          : { ...day, spent: parsedYearMonths.spent };
       });
 
       const spendings: number[] = expenses.map((day) => day.spent);
