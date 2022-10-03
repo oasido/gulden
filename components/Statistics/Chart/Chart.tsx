@@ -11,14 +11,17 @@ import {
   Filler,
   ChartComponentLike,
 } from 'chart.js';
-import { FC } from 'react';
 import { Bar, Line } from 'react-chartjs-2';
 import { ChartType } from 'types/generic';
 
-export const Chart: FC<{ data: any; error: any; chartType: ChartType }> = ({
+export const Chart = ({
   data,
   error,
   chartType,
+}: {
+  data: any;
+  error: any;
+  chartType: ChartType;
 }): JSX.Element => {
   const registerChart = (chartType: ChartType): ChartComponentLike => {
     switch (chartType) {
