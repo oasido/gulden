@@ -1,5 +1,5 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
-import { Tabs, SegmentedControl, createStyles, Grid, Title } from '@mantine/core';
+import { useState } from 'react';
+import { SegmentedControl, createStyles, Grid, Title } from '@mantine/core';
 import Chart from './Chart';
 import { ChartType, Expense, TimePeriod } from 'types/generic';
 import { AiOutlineBarChart, AiOutlineAreaChart } from 'react-icons/ai';
@@ -61,7 +61,7 @@ const Statistics = ({ expenses }: { expenses: Expense[] }): JSX.Element => {
           data={[
             { label: 'Last week', value: 'week' },
             { label: 'Month', value: 'month' },
-            { label: 'Year', value: 'all' },
+            { label: 'Year', value: 'year' },
           ]}
         />
       </div>
