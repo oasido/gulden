@@ -40,7 +40,6 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
         .toArray();
 
       const generateLastWeekArray = () => {
-        // const date = addDays(new Date(), 1);
         const today = endOfDay(new Date());
         const weekPastNow = subDays(today, 7);
 
