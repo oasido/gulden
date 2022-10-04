@@ -1,7 +1,5 @@
 import type { NextPage } from 'next';
 import { PageLayout } from '@components/PageLayout';
-import Expenses from '@components/Expenses';
-import Statistics from '@components/Statistics';
 import clientPromise from '@lib/mongodb';
 import {
   Box,
@@ -9,11 +7,8 @@ import {
   Center,
   Container,
   createStyles,
-  Grid,
-  Group,
   Input,
   SegmentedControl,
-  Stack,
   Text,
   TextInput,
   Title,
@@ -23,8 +18,9 @@ import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from './api/auth/[...nextauth]';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Expense } from 'types/generic';
-import { AiOutlineBarChart, AiOutlineAreaChart } from 'react-icons/ai';
-import { BiArrowBack } from 'react-icons/bi';
+import { AiOutlineBarChart, AiOutlineAreaChart, AiOutlineSave } from 'react-icons/ai';
+import { BiArrowBack, BiCalendar, BiCalendarWeek } from 'react-icons/bi';
+import { TbCalendarStats } from 'react-icons/tb';
 import Link from 'next/link';
 
 export const getServerSideProps = async ({
@@ -37,8 +33,8 @@ export const getServerSideProps = async ({
   const session = await unstable_getServerSession(req, res, authOptions);
   if (session?.user?.email) {
     const client = await clientPromise;
-    const db = client.db('gulden');
-    const expenseData = await db
+    const database = client.db('gulden');
+    const expenseData = await database
       .collection('expenses')
       .find({ user: session.user.email })
       .sort({ date: -1 })
@@ -144,7 +140,7 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
                 {
                   label: (
                     <Center>
-                      <AiOutlineBarChart size={16} />
+                      <BiCalendarWeek size={16} />
                       <Box ml={10}>Last week</Box>
                     </Center>
                   ),
@@ -153,7 +149,7 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
                 {
                   label: (
                     <Center>
-                      <AiOutlineBarChart size={16} />
+                      <BiCalendar size={16} />
                       <Box ml={10}>Month</Box>
                     </Center>
                   ),
@@ -162,7 +158,7 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
                 {
                   label: (
                     <Center>
-                      <AiOutlineAreaChart size={16} />
+                      <TbCalendarStats size={16} />
                       <Box ml={10}>Year</Box>
                     </Center>
                   ),
@@ -171,6 +167,11 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
               ]}
             />
           </Input.Wrapper>
+          <Center>
+            <Button size="lg" compact leftIcon={<AiOutlineSave />} my={15} color="green">
+              Save
+            </Button>
+          </Center>
         </Container>
       ) : (
         <Text mt="lg">You need to log in first!</Text>
