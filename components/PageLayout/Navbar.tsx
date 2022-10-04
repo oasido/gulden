@@ -2,6 +2,7 @@ import { createStyles, Title, Button, Menu, Text } from '@mantine/core';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import { BiLogOutCircle } from 'react-icons/bi';
+import { NextLink } from '@mantine/next';
 
 const useStyles = createStyles((theme) => ({
   navbar: {
@@ -49,7 +50,9 @@ export const Navbar = () => {
               {session.user?.email}
             </Text>
             <Menu.Label>Application</Menu.Label>
-            <Menu.Item>Settings</Menu.Item>
+            <Menu.Item component={NextLink} href="/settings">
+              Settings
+            </Menu.Item>
             <Menu.Item
               rightSection={
                 <Text size="xs" color="dimmed">
