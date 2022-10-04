@@ -38,8 +38,8 @@ const useStyles = createStyles((theme, getReference) => ({
 
   tableWrap: {
     [theme.fn.largerThan('md')]: {
-      maxHeight: 'calc(100vh - 195px)',
-      height: 'calc(100vh - 195px)',
+      maxHeight: 'calc(100vh - 212px)',
+      height: 'calc(100vh - 212px)',
       overflow: 'auto',
     },
   },
@@ -160,8 +160,8 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
         <Title order={4} className={classes.title}>
           Expenses
         </Title>
-        <Group spacing="xs">
-          <Button onClick={removeSelected} color="red" leftIcon={<FaTrashAlt />}>
+        <Group spacing="xs" mb={5} mx={5}>
+          <Button size="lg" compact onClick={removeSelected} color="red" leftIcon={<FaTrashAlt />}>
             Remove
           </Button>
           <AddExpenseModal setData={setData} />
@@ -172,10 +172,12 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
         value={globalFilter || ''}
         onChange={(event_: ChangeEvent<HTMLInputElement>) => setGlobalFilter(event_.target.value)}
         mb={10}
+        mx={5}
+        size="lg"
       />
 
       <div className={classes.tableWrap}>
-        <Table highlightOnHover verticalSpacing="sm" mb={20} captionSide="bottom">
+        <Table fontSize="lg" highlightOnHover verticalSpacing="sm" mb={20} captionSide="bottom">
           <caption>{new Date().toLocaleString()}</caption>
           <thead>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -75,20 +75,28 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
       {session ? (
         <Container size="sm">
           <Link href="/" passHref>
-            <Button leftIcon={<BiArrowBack />} my={15} variant="outline" color="gray">
+            <Button
+              size="lg"
+              compact
+              leftIcon={<BiArrowBack />}
+              my={15}
+              variant="outline"
+              color="gray"
+            >
               Go back
             </Button>
           </Link>
 
-          <Title order={2}>Settings</Title>
+          <Title order={1}>Settings</Title>
 
           <TextInput
             label="Email"
             description="The email you've used to log in through Google."
             placeholder="Your Google's Email Address"
-            my="xs"
+            my="md"
             value={session.user?.email ?? 'Unable to retrieve data'}
             disabled
+            size="lg"
             // {...form.getInputProps('name')}
             // error={form.errors.name && form.errors.name}
           />
@@ -96,9 +104,11 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
           <Input.Wrapper
             label="Chart type"
             description="Change how you view the data in the expense chart."
-            my="xs"
+            my="md"
+            size="lg"
           >
             <SegmentedControl
+              mt="xs"
               data={[
                 {
                   label: (
@@ -122,8 +132,14 @@ const Settings: NextPage<{ expenseData: string }> = ({ expenseData }) => {
             />
           </Input.Wrapper>
 
-          <Input.Wrapper label="Chart time period" description="..." my="xs">
+          <Input.Wrapper
+            label="Default history"
+            description="Default chart view history time period"
+            size="lg"
+            my="md"
+          >
             <SegmentedControl
+              mt="xs"
               data={[
                 {
                   label: (

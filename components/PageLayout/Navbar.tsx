@@ -5,12 +5,26 @@ import { BiLogOutCircle } from 'react-icons/bi';
 import { NextLink } from '@mantine/next';
 
 const useStyles = createStyles((theme) => ({
-  navbar: {
+  navbarWrapper: {
     backgroundColor: theme.colors.dark[8],
     borderBottom: `0.2rem solid ${theme.colors.dark[6]}`,
+  },
+
+  navbar: {
     padding: '0.8rem',
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between',
+  },
+
+  title: {
+    userSelect: 'none',
+  },
+
+  button: {
+    [theme.fn.largerThan('md')]: {
+      marginRight: '2rem',
+    },
   },
 }));
 
@@ -20,14 +34,11 @@ export const Navbar = () => {
 
   return (
     <div className={classes.navbar}>
-      <Title order={2}>💰 Gulden</Title>
-      {!session ? (
-        <Button
-          leftIcon={<FcGoogle />}
-          color="gray"
-          variant="subtle"
-          onClick={() => signIn('google')}
-        >
+            onClick={() => signIn('google')}
+            size="lg"
+            compact
+            radius="xl"
+          >
           Login with Google
         </Button>
       ) : (
@@ -40,10 +51,9 @@ export const Navbar = () => {
           transitionDuration={150}
         >
           <Menu.Target>
-            <Button mr={20} variant="outline" color="gray">
-              {session.user?.name}
-            </Button>
-          </Menu.Target>
+                compact
+                radius="xl"
+                size="lg"
 
           <Menu.Dropdown>
             <Text size="xs" color="dimmed" my={5} mx={5}>
