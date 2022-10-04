@@ -20,8 +20,8 @@ export const getServerSideProps = async ({
   const session = await unstable_getServerSession(req, res, authOptions);
   if (session?.user?.email) {
     const client = await clientPromise;
-    const db = client.db('gulden');
-    const expenseData = await db
+    const database = client.db('gulden');
+    const expenseData = await database
       .collection('expenses')
       .find({ user: session.user.email })
       .sort({ date: -1 })
