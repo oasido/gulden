@@ -59,11 +59,9 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
           const currentDayMinutes = date.getMinutes();
           const timeZoneOffset = date.getTimezoneOffset();
 
-          if (timeZoneOffset > 0) {
-            return currentDayMinutes + timeZoneOffset;
-          } else {
-            return currentDayMinutes - timeZoneOffset;
-          }
+          return timeZoneOffset > 0
+            ? currentDayMinutes + timeZoneOffset
+            : currentDayMinutes - timeZoneOffset;
         };
 
         const result = await axios.post('/api/expense/add', {
