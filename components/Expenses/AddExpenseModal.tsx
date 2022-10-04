@@ -21,6 +21,7 @@ import { useSession } from 'next-auth/react';
 import { Expense } from 'types/generic';
 import { useMediaQuery } from '@mantine/hooks';
 import { addMinutes } from 'date-fns';
+import { BiAddToQueue } from 'react-icons/bi';
 
 const useStyles = createStyles((theme) => ({
   //,
@@ -153,7 +154,9 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
           </Button>
         </Group>
       </Modal>
-      <Button onClick={() => setOpened(true)}>Add</Button>
+      <Button size="lg" compact onClick={() => setOpened(true)} leftIcon={<BiAddToQueue />}>
+        Add
+      </Button>
     </>
   );
 };
