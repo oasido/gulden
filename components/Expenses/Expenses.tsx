@@ -23,6 +23,7 @@ import {
 } from '@tanstack/react-table';
 import { FaTrashAlt } from 'react-icons/fa';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 const useStyles = createStyles((theme, getReference) => ({
   container: {},
@@ -147,9 +148,19 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
 
   const removeSelected = async () => {
     if (table.getSelectedRowModel().flatRows.length > 0) {
-      const rowsToRemove = new Set(table.getSelectedRowModel().flatRows.map((row) => row.original));
-      // TODO: remove from db and update state only when successful
-      setData((previous) => previous.filter((row) => !rowsToRemove.has(row)));
+      const rowsToRemove = table.getSelectedRowModel().flatRows.map((row) => row.original);
+
+      const response = await axios.post(
+        '/api/expense/remove',
+        rowsToRemove.map((row) => row._id)
+      );
+
+      if (response.status === 200) {
+        setData((previous) => previous.filter((row) => !rowsToRemove.includes(row)));
+      } else {
+        console.error(response);
+      }
+
       table.toggleAllRowsSelected(false);
     }
   };
