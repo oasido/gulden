@@ -95,7 +95,9 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             color: 'red',
           });
         }
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
