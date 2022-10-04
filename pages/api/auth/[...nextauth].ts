@@ -92,11 +92,7 @@ export const authOptions: NextAuthOptions = {
           return true;
         } else {
           const newUser = await users.insertOne(user);
-          if (newUser.acknowledged === true) {
-            return true;
-          } else {
-            return false;
-          }
+          return newUser.acknowledged === true ? true : false;
         }
       }
     },
