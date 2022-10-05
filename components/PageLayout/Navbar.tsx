@@ -4,6 +4,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { NextLink } from '@mantine/next';
 import { FaUser } from 'react-icons/fa';
+import Link from 'next/link';
 
 const useStyles = createStyles((theme) => ({
   navbarWrapper: {
@@ -20,9 +21,12 @@ const useStyles = createStyles((theme) => ({
 
   title: {
     userSelect: 'none',
+    cursor: 'pointer',
   },
 
   button: {
+    transition: 'all 0.2s ease-in-out',
+
     [theme.fn.largerThan('md')]: {
       marginRight: '2rem',
     },
@@ -36,9 +40,11 @@ export const Navbar = () => {
   return (
     <div className={classes.navbarWrapper}>
       <div className={classes.navbar}>
-        <Title order={1} className={classes.title}>
-          💰 Gulden
-        </Title>
+        <Link href="/">
+          <Title order={1} className={classes.title}>
+            💰 Gulden
+          </Title>
+        </Link>
         {!session ? (
           <Button
             leftIcon={<FcGoogle />}
