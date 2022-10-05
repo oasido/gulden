@@ -81,17 +81,20 @@ export const authOptions: NextAuthOptions = {
   // when an action is performed.
   // https://next-auth.js.org/configuration/callbacks
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }): Promise<boolean | undefined> {
+    async signIn({ user, account }): Promise<any> {
       if (account.provider === 'google') {
         const client = await clientPromise;
-        const db = client.db('gulden');
-        const users = db.collection('users');
+        const database = client.db('gulden');
+        const users = database.collection('users');
 
         const foundUser = await users.findOne({ email: user.email });
         if (foundUser !== null) {
           return true;
         } else {
-          const newUser = await users.insertOne(user);
+          const newUser = await users.insertOne({
+            ...user,
+            settings: { chartType: 'bar', timePeriod: 'month' },
+          });
           return newUser.acknowledged === true ? true : false;
         }
       }
