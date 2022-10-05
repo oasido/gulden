@@ -27,7 +27,10 @@ const useStyles = createStyles((theme) => ({
 
 const Statistics = ({ expenses }: { expenses: Expense[] }): JSX.Element => {
   const { classes } = useStyles();
-  const [timePeriod, setTimePeriod] = useState<TimePeriod>('week');
+
+  // TODO: Get user settings and update state accordingly
+  // const { data: settings } = useSWR('/api/settings', axios);
+  const [timePeriod, setTimePeriod] = useState<TimePeriod>('month');
   const [chartType, setChartType] = useState<ChartType>('bar');
 
   interface IAvailableCharts {
