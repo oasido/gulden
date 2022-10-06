@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { SegmentedControl, createStyles, Grid, Title } from '@mantine/core';
 import Chart from './Chart';
 import { ChartType, Expense, TimePeriod } from 'types/generic';
-import { AiOutlineBarChart, AiOutlineAreaChart } from 'react-icons/ai';
 import axios from 'axios';
 import useSWR from 'swr';
 import { Totals } from './Totals';
@@ -25,25 +24,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Statistics = ({ expenses }: { expenses: Expense[] }): JSX.Element => {
+const Statistics = ({ expenses, user }: { expenses: Expense[]; user: any }): JSX.Element => {
   const { classes } = useStyles();
 
-  // TODO: Get user settings and update state accordingly
-  // const { data: settings } = useSWR('/api/settings', axios);
-  const [timePeriod, setTimePeriod] = useState<TimePeriod>('month');
-  const [chartType, setChartType] = useState<ChartType>('bar');
-
-  interface IAvailableCharts {
-    label: string;
-    type: ChartType;
-    icon?: JSX.Element;
-  }
-  [];
-
-  const AVAILABLE_CHARTS: IAvailableCharts[] = [
-    { label: 'Bar Chart', type: 'bar', icon: <AiOutlineBarChart /> },
-    { label: 'Area Chart', type: 'area', icon: <AiOutlineAreaChart /> },
-  ];
+  const [timePeriod, setTimePeriod] = useState<TimePeriod>(user.settings.timePeriod ?? 'month');
+  const chartType: ChartType = user.settings.chartType ?? 'bar';
 
   const chartFetcher = (url: string) => axios.get(url).then((res) => res.data);
 

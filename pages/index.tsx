@@ -27,8 +27,10 @@ export const getServerSideProps = async ({
       .sort({ date: -1 })
       .toArray();
 
+    const userData = await database.collection('users').findOne({ email: session.user.email });
+
     return {
-      props: { expenseData: JSON.stringify(expenseData) },
+      props: { expenseData: JSON.stringify(expenseData), userData: JSON.stringify(userData) },
     };
   } else {
     return {
@@ -47,18 +49,19 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Home: NextPage<{ expenseData: string }> = ({ expenseData }) => {
+const Home: NextPage<{ expenseData: string; userData: string }> = ({ expenseData, userData }) => {
   const { data: session } = useSession();
   const { classes } = useStyles();
 
   const parsedExpenses: Expense[] = JSON.parse(expenseData);
+  const parsedUserData = JSON.parse(userData);
 
   return (
     <PageLayout>
       {session ? (
         <Grid className={classes.grid}>
           <Grid.Col md={7}>
-            <Statistics expenses={parsedExpenses} />
+            <Statistics expenses={parsedExpenses} user={parsedUserData} />
           </Grid.Col>
           <Grid.Col md={5} className={classes.expenseGrid}>
             <Expenses expenses={parsedExpenses} />
