@@ -5,6 +5,8 @@ import { BiLogOutCircle } from 'react-icons/bi';
 import { NextLink } from '@mantine/next';
 import { FaUser } from 'react-icons/fa';
 import Link from 'next/link';
+import { FiGithub, FiSettings } from 'react-icons/fi';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 const useStyles = createStyles((theme) => ({
   navbarWrapper: {
@@ -70,7 +72,6 @@ export const Navbar = () => {
                 compact
                 radius="xl"
                 size="lg"
-                // mr={20}
                 variant="outline"
                 color="gray"
                 leftIcon={<FaUser />}
@@ -84,10 +85,11 @@ export const Navbar = () => {
               <Text size="xs" color="dimmed" my={5} mx={5}>
                 {session.user?.email}
               </Text>
-              <Menu.Item component={NextLink} href="/settings">
+              <Menu.Item icon={<FiSettings />} component={NextLink} href="/settings">
                 Settings
               </Menu.Item>
               <Menu.Item
+                icon={<AiOutlineSearch />}
                 rightSection={
                   <Text size="xs" color="dimmed">
                     ⌘K
@@ -97,7 +99,7 @@ export const Navbar = () => {
                 Search
               </Menu.Item>
               <Menu.Divider />
-              <Menu.Item>About</Menu.Item>
+              <Menu.Item icon={<FiGithub />}>GitHub</Menu.Item>
               <Menu.Item onClick={() => signOut()} icon={<BiLogOutCircle />} color="red">
                 Logout
               </Menu.Item>
