@@ -25,9 +25,10 @@ export const Chart = ({
 }): JSX.Element => {
   const registerChart = (chartType: ChartType): ChartComponentLike => {
     switch (chartType) {
-      case 'bar':
+      case 'bar': {
         return [CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend];
-      case 'area':
+      }
+      case 'area': {
         return [
           CategoryScale,
           LinearScale,
@@ -38,8 +39,10 @@ export const Chart = ({
           Filler,
           Legend,
         ];
-      default:
+      }
+      default: {
         return [CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend];
+      }
     }
   };
 
@@ -77,11 +80,14 @@ export const Chart = ({
   if (error) return <div>Failed to load</div>;
 
   switch (chartType) {
-    case 'bar':
+    case 'bar': {
       return <Bar options={options} data={chartData} />;
-    case 'area':
+    }
+    case 'area': {
       return <Line options={options} data={chartData} />;
-    default:
+    }
+    default: {
       return <Bar options={options} data={chartData} />;
+    }
   }
 };
