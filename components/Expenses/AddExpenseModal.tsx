@@ -80,7 +80,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
           });
           setData((data: Expense[]) => [
             {
-              _id: result.data.insertId,
+              _id: result.data.insertedId,
               user: session.user?.email,
               ...form.values,
             },
