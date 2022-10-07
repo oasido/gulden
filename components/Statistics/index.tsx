@@ -24,13 +24,13 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const Statistics = ({ expenses, user }: { expenses: Expense[]; user: any }): JSX.Element => {
+const chartFetcher = (url: string) => axios.get(url).then((response) => response.data);
+
+const Statistics = ({ user }: { user: any }): JSX.Element => {
   const { classes } = useStyles();
 
   const [timePeriod, setTimePeriod] = useState<TimePeriod>(user.settings.timePeriod ?? 'month');
   const chartType: ChartType = user.settings.chartType ?? 'bar';
-
-  const chartFetcher = (url: string) => axios.get(url).then((res) => res.data);
 
   const { data, error } = useSWR(`/api/expenses/${timePeriod}`, chartFetcher, {
     refreshInterval: 5000,
