@@ -36,6 +36,7 @@ export const getServerSideProps = async ({
     return {
       props: {
         expenseData: '[]',
+        userData: '[]',
       },
     };
   }
@@ -61,7 +62,7 @@ const Home: NextPage<{ expenseData: string; userData: string }> = ({ expenseData
       {session ? (
         <Grid className={classes.grid}>
           <Grid.Col md={7}>
-            <Statistics expenses={parsedExpenses} user={parsedUserData} />
+            <Statistics user={parsedUserData} />
           </Grid.Col>
           <Grid.Col md={5} className={classes.expenseGrid}>
             <Expenses expenses={parsedExpenses} />
