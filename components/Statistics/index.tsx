@@ -57,6 +57,7 @@ const Statistics = ({ user }: { user: any }): JSX.Element => {
       <div className={classes.chart}>
         <Chart data={data} error={error} chartType={chartType} />
       </div>
+      <Totals data={data} />
     </>
   );
 };

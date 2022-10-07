@@ -4,26 +4,41 @@ import { FC } from 'react';
 const useStyles = createStyles((theme) => ({
   container: {
     display: 'flex',
-    alignItems: 'center',
-    gap: '5px',
   },
 }));
 
-export const Totals: FC<{ data: any }> = ({ data }) => {
+const sumExpenses = (data: number[]) => data.reduce((a, b) => a + b, 0);
+
+const getNamedTime = (data: number[] | string[]) => {
+  if (data.length === 8) return 'Weekly Expenses';
+  if (data.length === 31) return 'Monthly Expenses';
+  if (data.length === 12) return 'Yearly Expenses';
+  console.log(data.length);
+};
+
+export const Totals = ({ data }: { data: any }): JSX.Element => {
   const { classes } = useStyles();
+
+  console.log(data);
 
   return (
     <div className={classes.container}>
-      <Card my={0} shadow="sm" p="lg" radius="md" withBorder>
-        <Group position="apart" mt="" mb="xs">
-          <Text weight={500}>Monthly Expenses</Text>
-          <Badge color="pink" variant="light">
-            On Sale
-          </Badge>
+      <Card shadow="sm" p="sm" radius="md" withBorder mb={5}>
+        <Group position="apart" mb="xs" align="end">
+          <Text size="xl" weight={500}>
+            {data && getNamedTime(data?.spendings)}
+          </Text>
         </Group>
-        <Text size="xl" color="dimmed">
-          1,000$
-        </Text>
+
+        <Title order={1} align="center" color="red">
+          {data && sumExpenses(data?.spendings)}
+        </Title>
+
+        {data?.spendings.length === 8 && (
+          <Text size="sm" align="end" weight={500} color="dimmed">
+            {data && `${data?.labels[0]} - ${data?.labels[data?.labels.length - 1]}`}
+          </Text>
+        )}
       </Card>
     </div>
   );
