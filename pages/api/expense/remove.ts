@@ -4,39 +4,26 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@lib/mongodb';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
-
-const removeSchema = z.object({
-  user: z.string().trim().email(),
-  name: z.string().trim().min(2).max(25),
-  date: z.date(),
-  price: z.number(),
-});
+import { ObjectId } from 'mongodb';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const session = await unstable_getServerSession(request, response, authOptions);
 
+  const expensesToRemove = z.array(z.string()).safeParse(request.body);
+
+  !expensesToRemove.success && response.status(400).json({ error: 'Invalid request' });
+
   if (session) {
     if (request.method === 'POST') {
-      // const parse = removeSchema.safeParse({
-      //   user,
-      //   date: parsedDate,
-      //   name,
-      //   price,
-      // });
-      // if (parse.success === false) {
-      //   response.status(400).json(parse.error.errors);
-      //   return;
-      // }
-
       const client = await clientPromise;
       const database = client.db('gulden');
       const collection = database.collection('expenses');
 
-      // const databaseQuery = await collection.removeSchema({
+      const databaseQuery = await collection.deleteMany({
+        _id: { $in: request.body.map((expense: string) => new ObjectId(expense)) },
+      });
 
-      // });
-
-      response.status(200).json('response');
+      response.status(200).json(databaseQuery);
     } else {
       response.status(400).json('Error code 400, bad request method.');
     }
