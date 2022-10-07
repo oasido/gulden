@@ -3,7 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import clientPromise from '@lib/mongodb';
 import { unstable_getServerSession } from 'next-auth/next';
 import { authOptions } from '../auth/[...nextauth]';
-import { eachDayOfInterval, endOfMonth, format, isSameDay, startOfMonth } from 'date-fns';
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  format,
+  isSameDay,
+  parseISO,
+  startOfDay,
+  startOfMonth,
+} from 'date-fns';
 
 const handler = async (request: NextApiRequest, response: NextApiResponse) => {
   const session = await unstable_getServerSession(request, response, authOptions);
@@ -32,7 +40,12 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
           },
           {
             $group: {
-              _id: '$date',
+              _id: {
+                $dateToString: {
+                  date: '$date',
+                  format: '%m-%d-%Y',
+                },
+              },
               spent: { $sum: '$price' },
             },
           },
@@ -59,7 +72,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
 
         const parsedMonth: IParsedExpense = databaseQueryResult.find(
           (o: ExpenseSearchQueryResult, index: number) => {
-            const isFound = isSameDay(o._id, date);
+            const isFound = isSameDay(new Date(o._id), date);
             if (isFound) {
               databaseQueryResult.splice(index, 1);
               return isFound;

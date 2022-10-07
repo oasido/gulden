@@ -32,7 +32,12 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
           },
           {
             $group: {
-              _id: '$date',
+              _id: {
+                $dateToString: {
+                  date: '$date',
+                  format: '%m-%d-%Y',
+                },
+              },
               spent: { $sum: '$price' },
             },
           },
@@ -59,7 +64,7 @@ const handler = async (request: NextApiRequest, response: NextApiResponse) => {
 
         const parsedWeek: IParsedExpense = databaseQueryResult.find(
           (o: ExpenseSearchQueryResult, index: number) => {
-            const isFound = isSameDay(o._id, date);
+            const isFound = isSameDay(new Date(o._id), date);
             if (isFound) {
               databaseQueryResult.splice(index, 1);
               return isFound;
