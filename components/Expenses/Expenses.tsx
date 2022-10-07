@@ -40,8 +40,8 @@ const useStyles = createStyles((theme, getReference) => ({
 
   tableWrap: {
     [theme.fn.largerThan('md')]: {
-      maxHeight: 'calc(100vh - 212px)',
-      height: 'calc(100vh - 212px)',
+      maxHeight: 'calc(100vh - 220px)',
+      height: 'calc(100vh - 220px)',
       overflow: 'auto',
     },
   },
