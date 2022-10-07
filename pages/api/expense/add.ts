@@ -11,19 +11,19 @@ const expenseSchema = z.object({
   user: z.string().trim().email(),
   name: z.string().trim().min(2).max(25),
   date: z.date(),
-  price: z.number(),
+  price: z.number().positive(),
 });
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await unstable_getServerSession(req, res, authOptions);
+const handler = async (request: NextApiRequest, response: NextApiResponse) => {
+  const session = await unstable_getServerSession(request, response, authOptions);
 
   if (session) {
-    if (req.method === 'POST') {
-      const { user, date, name, price }: Expense = req.body;
+    if (request.method === 'POST') {
+      const { user, date, name, price }: Expense = request.body;
       const parsedDate = new Date(date);
 
       if (parsedDate.toISOString() === 'Invalid Date') {
-        res.status(400).json('Invalid date, what are you trying to do?');
+        response.status(400).json('Invalid date, what are you trying to do?');
       }
 
       const parse = expenseSchema.safeParse({
@@ -33,26 +33,26 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         price,
       });
       if (parse.success === false) {
-        res.status(400).json(parse.error.errors);
+        response.status(400).json(parse.error.errors);
         return;
       }
 
       const client = await clientPromise;
-      const db = client.db('gulden');
-      const collection = db.collection('expenses');
-      const response = await collection.insertOne({
+      const database = client.db('gulden');
+      const collection = database.collection('expenses');
+      const databaseQuery = await collection.insertOne({
         user,
         date: parseISO(date),
         name,
         price,
       });
 
-      res.status(200).json(response);
+      response.status(200).json(databaseQuery);
     } else {
-      res.status(400).json('Error code 400, bad request method.');
+      response.status(400).json('Error code 400, bad request method.');
     }
   } else {
-    res.status(401).json('Unauthorized request.');
+    response.status(401).json('Unauthorized request.');
   }
 };
 

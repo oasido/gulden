@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
 const expenseSchema = z.object({
   name: z.string().trim().min(2).max(25),
   date: z.date({ invalid_type_error: "That's not a date!" }),
-  price: z.number(),
+  price: z.number().positive(),
 });
 
 export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) => {
@@ -52,7 +52,6 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
   const addExpense = async () => {
     form.validate();
 
-    // check if there are any parse errors
     if (Object.keys(form.errors).length === 0 && form.isValid() && session) {
       try {
         const calcOffset = () => {
@@ -71,7 +70,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
           date: addMinutes(form.values.date, calcOffset()),
         });
 
-        if (result.status === 200) {
+        if (result.status === 200 && result.data.acknowledged) {
           showNotification({
             title: 'Expense added',
             message: '',
@@ -142,7 +141,7 @@ export const AddExpenseModal = ({ setData }: { setData: (data: any) => void }) =
             precision={2}
             step={0.05}
             {...form.getInputProps('price')}
-            onFocus={(evt) => evt.target.select()}
+            onFocus={(event_) => event_.target.select()}
           />
         </Container>
         <Group position="center">
