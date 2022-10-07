@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/filename-case
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
   createStyles,
@@ -70,7 +71,7 @@ const IndeterminateCheckbox = ({
   indeterminate,
   ...rest
 }: { indeterminate?: boolean } & Partial<CheckboxProps>) => {
-  const reference: any = useRef(null!);
+  const reference: any = useRef(undefined!);
 
   useEffect(() => {
     if (typeof indeterminate === 'boolean') {
@@ -188,49 +189,50 @@ export const Expenses = ({ expenses }: { expenses: Expense[] }) => {
       />
 
       <div className={classes.tableWrap}>
-        <Table fontSize="lg" highlightOnHover verticalSpacing="sm" mb={20} captionSide="bottom">
-          <caption>{new Date().toLocaleString()}</caption>
-          <thead>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header, idx) => (
-                  <th
-                    className={`${idx === 0 && classes.selectCol} ${idx === 1 && classes.dateCol} ${
-                      idx === 2 && classes.nameCol
-                    } ${idx === 3 && classes.priceCol}`}
-                    key={header.id}
-                  >
-                    {header.isPlaceholder ? null : (
-                      <div
-                        {...{
-                          className: header.column.getCanSort() ? classes.sortable : '',
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                        {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </div>
-                    )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className={classes.cell}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        {table.getPrePaginationRowModel().flatRows.length > 0 && (
+          <Table fontSize="lg" highlightOnHover verticalSpacing="sm" mb={20}>
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header, index) => (
+                    <th
+                      className={`${index === 0 && classes.selectCol} ${
+                        index === 1 && classes.dateCol
+                      } ${index === 2 && classes.nameCol} ${index === 3 && classes.priceCol}`}
+                      key={header.id}
+                    >
+                      {header.isPlaceholder ? undefined : (
+                        <div
+                          {...{
+                            className: header.column.getCanSort() ? classes.sortable : '',
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: ' 🔼',
+                            desc: ' 🔽',
+                          }[header.column.getIsSorted() as string] ?? undefined}
+                        </div>
+                      )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows.map((row) => (
+                <tr key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className={classes.cell}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
         {table.getPrePaginationRowModel().rows.length === 0 && globalFilter !== '' && (
           <Text size="lg">Nothing found.</Text>
         )}
