@@ -13,13 +13,10 @@ const getNamedTime = (data: number[] | string[]) => {
   if (data.length === 8) return 'Weekly Expenses';
   if (data.length === 31) return 'Monthly Expenses';
   if (data.length === 12) return 'Yearly Expenses';
-  console.log(data.length);
 };
 
 export const Totals = ({ data }: { data: any }): JSX.Element => {
   const { classes } = useStyles();
-
-  console.log(data);
 
   return (
     <div className={classes.container}>

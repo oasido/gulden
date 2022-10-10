@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { SegmentedControl, createStyles, Grid, Title } from '@mantine/core';
+import { SegmentedControl, createStyles } from '@mantine/core';
 import Chart from './Chart';
 import { ChartType, Expense, TimePeriod } from 'types/generic';
 import axios from 'axios';
 import useSWR from 'swr';
 import { Totals } from './Totals';
+import { TimeNavigation } from './TimeNavigation';
 
 const useStyles = createStyles((theme) => ({
   segmentedControls: {
@@ -53,7 +54,7 @@ const Statistics = ({ user }: { user: any }): JSX.Element => {
           ]}
         />
       </div>
-
+      <TimeNavigation />
       <div className={classes.chart}>
         <Chart data={data} error={error} chartType={chartType} />
       </div>
